@@ -1,0 +1,19 @@
+node_modules/
+.next/
+out/
+.cache/
+
+#  Build
+
+/build/
+/.next/
+/.vercel/
+
+# Variaveis de ambiente
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# VScode
+.vscode/
