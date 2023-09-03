@@ -12,7 +12,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body className="bg-white">
+        <div className="h-auto w-width-100vw p-4">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

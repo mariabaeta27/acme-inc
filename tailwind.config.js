@@ -8,6 +8,29 @@ export const content = [
   './src/**/*.{js,ts,jsx,tsx,mdx}',
 ];
 export const theme = {
-  extend: {},
+  extend: {
+    spacing: {
+      'width-100vw': '100vw',
+      '128': '32rem',
+      '144': '36rem',
+    },
+  },
+  screens: {
+    'sm': '640px',
+    'md': '768px',
+    'lg': '1024px',
+    'xl': '1280px',
+    '2xl': '1536px',
+  },
+  colors: {
+    'green': '#31422e',
+    'green-ligth': '#e8eae4',
+    'orange': '#fd6e39',
+    'orange-light': '#ffe6dd',
+    'bege': '#efe8d4',
+    'white': '#ffffff',
+    'gray': '#8492a6',
+    'gray-light': '#d3dce6',
+  },
 };
 export const plugins = [];

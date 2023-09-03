@@ -1,5 +1,14 @@
+import { CardLoginRegister, RegisterComponent } from "../Components"
+
 const Register = () => {
-  return <h1 className="text-3xl font-bold underline">Hello Register!</h1>
+
+  return (
+
+    <CardLoginRegister>
+      <RegisterComponent />
+    </CardLoginRegister>
+
+  )
 }
 
 export default Register
