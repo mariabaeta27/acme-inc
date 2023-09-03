@@ -1,8 +1,9 @@
-const Input = ({ label, name, type = 'text', register, minLength, }:
-  { label: string, name: string, type: string, register: any, minLength?: number, }) => (
+const Input = ({ label, name, type = 'text', register, minLength, disabled = false }:
+  { label: string, name: string, type: string, register: any, minLength?: number, disabled?: boolean }) => (
   <>
     <label htmlFor={name} className="text-sm">{label}</label>
     <input
+      disabled={disabled}
       type={type}
       name={name}
       required

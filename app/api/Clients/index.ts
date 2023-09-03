@@ -16,7 +16,7 @@ const postClient = (data: InputsResgister) => {
         localStorage.setItem('bdClients', JSON.stringify([...JSON.parse(bgClients), { ...data, id: uuidv4() }])) :
         localStorage.setItem('bdClients', JSON.stringify([{ ...data, id: uuidv4() }]))
       return {
-        status: 201,
+        status: 200,
         message: 'Cadastro realizado com sucesso!'
       }
     }

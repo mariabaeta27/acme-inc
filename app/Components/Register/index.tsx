@@ -1,38 +1,37 @@
 'use client'
-
 import { SubmitHandler, useForm } from "react-hook-form"
-
+import { useRouter } from 'next/navigation';
 import Button from "../Button";
 import Input from "../Input";
 import { postClient } from "../../api/Clients";
 import { InputsResgister, Message } from "../../../types/types";
-import { useEffect, useState } from "react";
-import Loading from "../Loading";
+import { useState } from "react";
+import Modal from "../Modal";
 
 const RegisterComponent = () => {
 
-
   const [message, setMessage] = useState<Message | null>()
   const [openModal, setOpenModal] = useState(false)
-
-
-  useEffect(() => {
-    setOpenModal(true)
-    console.log(message)
-  }, [message])
+  const router = useRouter()
 
 
   const { register, handleSubmit, formState: { errors } } = useForm<InputsResgister>();
 
   const onSubmit: SubmitHandler<InputsResgister> = async (data: InputsResgister) => {
-    setMessage({ message: 'Aguarde...' })
     const result = postClient(data)
+    setOpenModal(true)
     setMessage(result)
-
   }
 
   return (
     <>
+      <Modal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        message={message}
+        button='Login'
+        onClick={() => router.push('/login')}
+      />
       <header>
         <h1 className="text-2xl font-medium pb-4 text-green">Crie sua conta</h1>
       </header>
@@ -43,18 +42,21 @@ const RegisterComponent = () => {
             name='name'
             type="text"
             register={register('name')}
+            disabled={openModal}
           />
           <Input
             label='Email'
             name='email'
-            type="text"
+            type="email"
             register={register('email')}
+            disabled={openModal}
           />
           <Input
             label="Telefone"
             name='phone'
             type="tel"
             register={register('phone')}
+            disabled={openModal}
           />
           <Input
             label="Senha"
@@ -62,8 +64,12 @@ const RegisterComponent = () => {
             type="password"
             minLength={5}
             register={register('password')}
+            disabled={openModal}
           />
-          <Button type='submit' text="Cadastar" />
+          <div className="flex">
+            <Button type='submit' text="Cadastar" disabled={openModal} />
+            <Button type='button' text="Voltar" disabled={openModal} onClick={() => router.push('/login')} />
+          </div>
         </form>
       </div>
     </>
