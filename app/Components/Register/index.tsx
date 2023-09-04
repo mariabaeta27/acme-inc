@@ -29,7 +29,7 @@ const RegisterComponent = () => {
         isOpen={openModal}
         onClose={() => setOpenModal(false)}
         message={message}
-        button='Login'
+        button={message?.message !== 'Email já cadastrado' && 'Login'}
         onClick={() => router.push('/login')}
       />
       <header>

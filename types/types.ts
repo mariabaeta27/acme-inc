@@ -6,6 +6,11 @@ export type InputsResgister = {
 }
 
 export type Message = {
-  message: string
+  message?: string
   status?: number,
+}
+
+export type InputsLogin = {
+  email: string,
+  password: string
 }
