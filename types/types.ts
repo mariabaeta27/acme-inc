@@ -14,3 +14,11 @@ export type InputsLogin = {
   email: string,
   password: string
 }
+
+export type Product = {
+  id: any;
+  name: string;
+  description: string;
+  value: string;
+  image: string | void;
+}
