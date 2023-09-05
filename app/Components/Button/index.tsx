@@ -1,4 +1,3 @@
-import classNames from "classnames"
 
 const Button = ({ text, type = 'button', onClick, disabled = false, className }: { text: string, type: "button" | "submit" | "reset", onClick?: any, disabled?: boolean, className?: string }) => (
   <button

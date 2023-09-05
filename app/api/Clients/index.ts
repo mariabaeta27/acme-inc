@@ -1,11 +1,11 @@
-import { InputsLogin, InputsResgister } from "../../../types/types"
+import { ClientComplet, InputsLogin, InputsResgister, Message } from "../../../types/types"
 import { v4 as uuidv4 } from 'uuid';
 
-const postClient = (data: InputsResgister) => {
+const postClient = (data: InputsResgister): Message => {
 
   const bgClients = localStorage.getItem('bdClients')
 
-  const client = bgClients && JSON.parse(bgClients)?.filter((client: InputsResgister) => client.email === data.email)
+  const client = bgClients && JSON.parse(bgClients)?.filter((client: ClientComplet) => client.email === data.email)
 
 
   try {
@@ -13,8 +13,8 @@ const postClient = (data: InputsResgister) => {
       throw new Error('Email já cadastrado')
     } else {
       bgClients ?
-        localStorage.setItem('bdClients', JSON.stringify([...JSON.parse(bgClients), { ...data, id: uuidv4() }])) :
-        localStorage.setItem('bdClients', JSON.stringify([{ ...data, id: uuidv4() }]))
+        localStorage.setItem('bdClients', JSON.stringify([...JSON.parse(bgClients), { ...data, id: uuidv4(), favorites: [] }])) :
+        localStorage.setItem('bdClients', JSON.stringify([{ ...data, id: uuidv4(), favorites: [] }]))
       return {
         status: 200,
         message: 'Cadastro realizado com sucesso!'
@@ -40,7 +40,7 @@ const getClient = (data: InputsLogin) => {
     } else if (isClient && (!bgClients || client.length === 0)) {
       throw new Error('Email ou senha informados não conferem')
     } else {
-      localStorage.setItem('client', JSON.stringify({ id: client[0]?.id, name: client[0]?.name, email: client[0]?.email }))
+      localStorage.setItem('client', JSON.stringify({ id: client[0]?.id, name: client[0]?.name, email: client[0]?.email, favorites: client[0]?.favorites }))
       return {
         status: 200,
       }
@@ -54,5 +54,9 @@ const getClient = (data: InputsLogin) => {
 
 }
 
+const logout = () => {
+  localStorage.removeItem('client')
+}
 
-export { postClient, getClient }
+
+export { postClient, getClient, logout }

@@ -21,4 +21,9 @@ const postCart = (product: Product) => {
   }
 }
 
-export { postCart }
+
+const clearCart = () => {
+  localStorage.removeItem('bgCart')
+}
+
+export { postCart, clearCart }

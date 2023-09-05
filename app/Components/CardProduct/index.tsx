@@ -1,13 +1,15 @@
 'use client'
 import { HeartIcon } from "@heroicons/react/24/outline"
-import { Message, Product } from "../../../types/types"
+import { Client, Message, Product } from "../../../types/types"
 import Button from "../Button"
 import { postCart } from "../../api/Ecomerce"
 import { useState } from "react"
 
-const CardProduct = ({ product }: { product: Product }) => {
+const CardProduct = ({ product, isClient }: { product: Product, isClient: Client }) => {
   const [alertMessage, setAlertMessage] = useState<Message | null>()
   const [openAlert, setOpenAlert] = useState(false)
+
+  const isClientStyle = isClient ? 'text-green' : 'text-green-ligth'
 
   const addProductCart = (productSelect: Product) => {
     const result = postCart(productSelect)
@@ -31,9 +33,9 @@ const CardProduct = ({ product }: { product: Product }) => {
         <p className="line-clamp-2 text-xs text-justify text-gray mr-2">{product?.description}</p>
         <p className="text-end mt-3 mr-2 font-bold text-green">R${product?.value}</p>
         <div className="flex">
-          <Button text="Adicionar ao carrinho" type="button" className="text-xs m-0.5" onClick={() => addProductCart(product)} />
-          <button>
-            <HeartIcon className="h-5 w-5 text-green ml-2" />
+          <Button text="Adicionar ao carrinho" type="button" className="text-xs my-3" onClick={() => addProductCart(product)} />
+          <button disabled={!isClient ? true : false}>
+            <HeartIcon className={`h-5 w-5 mx-2 ${isClientStyle}`} />
           </button>
         </div>
       </div>

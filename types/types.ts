@@ -22,3 +22,13 @@ export type Product = {
   value: string;
   image: string;
 }
+
+export type Client = { id: number, name: string, email: string }
+
+export type ClientComplet = {
+  name: string,
+  email: string,
+  phone: string,
+  password: string,
+  favorites: []
+}
