@@ -5,7 +5,7 @@ import Dropdown from "../Dropdown"
 
 
 const Header = ({ isClient }: { isClient: Client }) => {
-  console.log(isClient)
+  // console.log(isClient)
 
   return (
     <header className='grid grid-cols-2 gap-2 ml-5'>

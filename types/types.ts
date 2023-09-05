@@ -2,7 +2,7 @@ export type InputsResgister = {
   name: string,
   email: string,
   phone: string,
-  password: string
+  password: string,
 }
 
 export type Message = {
@@ -26,9 +26,11 @@ export type Product = {
 export type Client = { id: number, name: string, email: string }
 
 export type ClientComplet = {
+  id: number,
   name: string,
   email: string,
   phone: string,
   password: string,
-  favorites: []
+  favorites: [],
+  productsCart: []
 }

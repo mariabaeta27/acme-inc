@@ -3,17 +3,16 @@ import { HeartIcon } from "@heroicons/react/24/outline"
 import { Client, Message, Product } from "../../../types/types"
 import Button from "../Button"
 import { postCart } from "../../api/Ecomerce"
-import { useState } from "react"
 
-const CardProduct = ({ product, isClient }: { product: Product, isClient: Client }) => {
-  const [alertMessage, setAlertMessage] = useState<Message | null>()
-  const [openAlert, setOpenAlert] = useState(false)
+const CardProduct = ({ product, isClient, setAlertMessage, openAlert }:
+  { product: Product, isClient: Client, setAlertMessage: any, openAlert: any }) => {
 
   const isClientStyle = isClient ? 'text-green' : 'text-green-ligth'
 
   const addProductCart = (productSelect: Product) => {
     const result = postCart(productSelect)
     setAlertMessage(result)
+    openAlert(true)
   }
 
 
@@ -39,7 +38,6 @@ const CardProduct = ({ product, isClient }: { product: Product, isClient: Client
           </button>
         </div>
       </div>
-
     </div>
   )
 }

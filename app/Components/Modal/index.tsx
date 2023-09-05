@@ -19,8 +19,7 @@ const Modal = (
           onClick={onClose}
           className="m-1 p-1 absolute top-0 right-0"
         >
-          {message?.status !== 200 && (<XMarkIcon className="text-green h-6 w-6" />)}
-
+          <XMarkIcon className="text-green h-6 w-6" />
         </button>
         {button && (
           <div className="flex mt-5">
@@ -29,7 +28,7 @@ const Modal = (
         )}
       </div>
     </div>
-  );
+  )
 };
 
 export default Modal;

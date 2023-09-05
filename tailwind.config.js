@@ -31,6 +31,7 @@ export const theme = {
     'white': '#ffffff',
     'gray': '#8492a6',
     'gray-light': '#d3dce6',
+    'green-500': ' rgb(34 197 94)'
   },
 };
 export const plugins = [];

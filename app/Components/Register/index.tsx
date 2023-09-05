@@ -15,7 +15,7 @@ const RegisterComponent = () => {
   const router = useRouter()
 
 
-  const { register, handleSubmit, formState: { errors } } = useForm<InputsResgister>();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<InputsResgister>();
 
   const onSubmit: SubmitHandler<InputsResgister> = async (data: InputsResgister) => {
     const result = postClient(data)
@@ -27,7 +27,10 @@ const RegisterComponent = () => {
     <>
       <Modal
         isOpen={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={() => (
+          reset(),
+          setOpenModal(false)
+        )}
         message={message}
         button={message?.message !== 'Email já cadastrado' && 'Login'}
         onClick={() => router.push('/login')}

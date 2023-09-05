@@ -13,8 +13,8 @@ const postClient = (data: InputsResgister): Message => {
       throw new Error('Email já cadastrado')
     } else {
       bgClients ?
-        localStorage.setItem('bdClients', JSON.stringify([...JSON.parse(bgClients), { ...data, id: uuidv4(), favorites: [] }])) :
-        localStorage.setItem('bdClients', JSON.stringify([{ ...data, id: uuidv4(), favorites: [] }]))
+        localStorage.setItem('bdClients', JSON.stringify([...JSON.parse(bgClients), { ...data, id: uuidv4(), favorites: [], productsCart: [] }])) :
+        localStorage.setItem('bdClients', JSON.stringify([{ ...data, id: uuidv4(), favorites: [], productsCart: [] }]))
       return {
         status: 200,
         message: 'Cadastro realizado com sucesso!'
@@ -40,7 +40,7 @@ const getClient = (data: InputsLogin) => {
     } else if (isClient && (!bgClients || client.length === 0)) {
       throw new Error('Email ou senha informados não conferem')
     } else {
-      localStorage.setItem('client', JSON.stringify({ id: client[0]?.id, name: client[0]?.name, email: client[0]?.email, favorites: client[0]?.favorites }))
+      localStorage.setItem('clientLogged', JSON.stringify({ id: client[0]?.id, name: client[0]?.name, favorites: client[0]?.favorites, productsCart: client[0]?.productsCart }))
       return {
         status: 200,
       }
@@ -55,7 +55,28 @@ const getClient = (data: InputsLogin) => {
 }
 
 const logout = () => {
-  localStorage.removeItem('client')
+  const clientLogged = localStorage.getItem('clientLogged')
+  const client = clientLogged && JSON.parse(clientLogged)
+
+  const bdClients = localStorage.getItem('bdClients')
+  const clients = bdClients && JSON.parse(bdClients)
+
+  const newClients = clients.map((clientArr: ClientComplet) => {
+    if (client.id === clientArr.id) {
+      return {
+        ...clientArr,
+        favorites: [...client.favorites],
+        productsCart: [...client.productsCart]
+      }
+    } else {
+      return clientArr
+    }
+  })
+
+  console.log(newClients)
+  localStorage.setItem('bdClients', JSON.stringify(newClients))
+
+  // localStorage.removeItem('clientLogged')
 }
 
 

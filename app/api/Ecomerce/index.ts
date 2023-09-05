@@ -1,13 +1,17 @@
 import { Product } from "../../../types/types"
 
 const postCart = (product: Product) => {
-  const bgCart = localStorage.getItem('bgCart')
-  try {
+  const bdCart = localStorage.getItem('bdCart')
+  const clientLogged = localStorage.getItem('clientLogged')
+  const client = clientLogged && JSON.parse(clientLogged)
 
-    if (!bgCart) {
-      localStorage.setItem('bgCart', JSON.stringify([{ ...product }]))
+  try {
+    if (!bdCart) {
+      localStorage.setItem('bdCart', JSON.stringify([{ ...product }]))
+      clientLogged && localStorage.setItem('clientLogged', JSON.stringify({ ...client, productsCart: [...client.productsCart, { ...product }] }))
     } else {
-      localStorage.setItem('bgCart', JSON.stringify([...JSON.parse(bgCart), { ...product }]))
+      localStorage.setItem('bdCart', JSON.stringify([...JSON.parse(bdCart), { ...product }]))
+      clientLogged && localStorage.setItem('clientLogged', JSON.stringify({ ...client, productsCart: [...client.productsCart, { ...product }] }))
     }
     return {
       status: 200,
@@ -23,7 +27,12 @@ const postCart = (product: Product) => {
 
 
 const clearCart = () => {
-  localStorage.removeItem('bgCart')
+  localStorage.removeItem('bdCart')
 }
+
+
+
+
+
 
 export { postCart, clearCart }
