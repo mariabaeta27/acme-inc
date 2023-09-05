@@ -34,10 +34,12 @@ const Home = () => {
           <p className="text-green text-2xl font-medium">User</p>
         </div>
       </header>
-      <div className="border-2 mt-5 grid sm:grid-cols-3 p-1 lg:grid-cols-4 2xl:grid-cols-5">
+      <div className="mt-5 grid sm:grid-cols-3 p-1 lg:grid-cols-4 2xl:grid-cols-5">
 
         {products && products?.map((product: Product) => (
-          <CardProduct product={product} />
+          <div key={product?.id}>
+            <CardProduct product={product} />
+          </div>
         ))}
 
 

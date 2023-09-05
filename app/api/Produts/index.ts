@@ -1,10 +1,14 @@
 import { adjectives, verbs } from "../../utils/constants"
 import { randomNumber, randomDescription, randomImage } from "../../utils/functions"
 import { v4 as uuidv4 } from 'uuid';
+import { LoremIpsum } from "lorem-ipsum";
+
+
 
 
 const createdProduct = async () => {
   const bdProducts = localStorage.getItem('bdProducts')
+
   if (!bdProducts) {
     const products = verbs?.map(async () => {
       let verb = verbs[randomNumber()]

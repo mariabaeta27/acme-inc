@@ -20,5 +20,5 @@ export type Product = {
   name: string;
   description: string;
   value: string;
-  image: string | void;
+  image: string;
 }
