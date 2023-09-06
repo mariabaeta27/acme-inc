@@ -65,8 +65,8 @@ const logout = () => {
     if (client.id === clientArr.id) {
       return {
         ...clientArr,
-        favorites: [...client.favorites],
-        productsCart: [...client.productsCart]
+        favorites: [...clientArr.favorites, ...client.favorites],
+        productsCart: [...clientArr.productsCart, ...client.productsCart]
       }
     } else {
       return clientArr

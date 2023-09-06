@@ -31,8 +31,37 @@ const clearCart = () => {
 }
 
 
+const addProductFavorites = (product: Product) => {
+  try {
+    const clientLogged = localStorage.getItem('clientLogged')
+    const client = clientLogged && JSON.parse(clientLogged)
+    let favoritesArray;
+    if (client?.favorites.length !== 0) {
+      favoritesArray = [...client?.favorites, { ...product }]
+    } else {
+      favoritesArray = [{ ...product }]
+    }
+    localStorage.setItem('clientLogged', JSON.stringify({ ...client, favorites: [...favoritesArray] }))
+    return {
+      status: 200,
+      message: `Produto ${product?.name} adicionado ao favoritos com sucesso`
+    }
+  } catch (error) {
+    return {
+      status: 400,
+      message: `Falha ao adicionar produto ${product?.name} aos favovitos`
+    }
+  }
+
+
+
+  console.log(product)
+
+}
 
 
 
 
-export { postCart, clearCart }
+
+
+export { postCart, clearCart, addProductFavorites }

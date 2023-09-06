@@ -2,7 +2,7 @@
 import { HeartIcon } from "@heroicons/react/24/outline"
 import { Client, Message, Product } from "../../../types/types"
 import Button from "../Button"
-import { postCart } from "../../api/Ecomerce"
+import { addProductFavorites, postCart } from "../../api/Ecomerce"
 
 const CardProduct = ({ product, isClient, setAlertMessage, openAlert }:
   { product: Product, isClient: Client, setAlertMessage: any, openAlert: any }) => {
@@ -11,6 +11,13 @@ const CardProduct = ({ product, isClient, setAlertMessage, openAlert }:
 
   const addProductCart = (productSelect: Product) => {
     const result = postCart(productSelect)
+    setAlertMessage(result)
+    openAlert(true)
+  }
+
+  const addFavorites = (productFav: Product) => {
+    const result = addProductFavorites(productFav)
+    console.log(result)
     setAlertMessage(result)
     openAlert(true)
   }
@@ -33,7 +40,7 @@ const CardProduct = ({ product, isClient, setAlertMessage, openAlert }:
         <p className="text-end mt-3 mr-2 font-bold text-green">R${product?.value}</p>
         <div className="flex">
           <Button text="Adicionar ao carrinho" type="button" className="text-xs my-3" onClick={() => addProductCart(product)} />
-          <button disabled={!isClient ? true : false}>
+          <button onClick={() => addFavorites(product)} disabled={!isClient ? true : false}>
             <HeartIcon className={`h-5 w-5 mx-2 ${isClientStyle}`} />
           </button>
         </div>
