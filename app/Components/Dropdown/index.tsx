@@ -24,7 +24,9 @@ const Dropdown = ({ data }: { data: Client }) => {
         onClick={toggleDropdown}
         className="text-green font-semibold pl-2 pb-2 inline-flex items-end"
       >
-        {data.name}
+        <p className="w-28 truncate break-all sm:w-auto">
+          {data.name}
+        </p>
         <svg
           className="w-4 h-4 ml-2"
           xmlns="http://www.w3.org/2000/svg"

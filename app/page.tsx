@@ -3,25 +3,29 @@
 import { useEffect, useState } from "react"
 import { getProducts } from "./api/Produts"
 import { Client, Message, Product, ProductWithFavorites } from "../types/types"
-import { Alert, CardProduct, Header } from "./Components"
+import { Alert, CardProduct, Filters, Header, Loading } from "./Components"
 
 
 const Home = () => {
 
   const [products, setProducts] = useState<ProductWithFavorites[] | Product[] | null>()
   const [productFavorites, setProductFavorites] = useState<ProductWithFavorites[] | null>()
+  const [productsFilters, setProductsFilters] = useState<ProductWithFavorites[] | Product[] | null>()
   const [isClient, setIsClient] = useState<null | Client>()
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<Message | null>()
+  const [loading, setLoading] = useState(true)
 
   const handleAlertClose = () => {
-    setShowAlert(false);
+    setShowAlert(true);
   };
 
   useEffect(() => {
+    setLoading(true)
     const client = localStorage.getItem('clientLogged')
     setIsClient(client && JSON.parse(client))
     const favorites = client && JSON.parse(client).favorites
+
     const fetchProducts = async () => {
       const products = await getProducts();
 
@@ -36,39 +40,55 @@ const Home = () => {
         })
         setProducts(newProducts)
         setProductFavorites(newProducts)
+        setProductsFilters(newProducts)
       } else {
         setProducts(products)
       }
     };
     fetchProducts()
+    setLoading(false)
   }, [])
 
 
   return (
     <>
-      <Header isClient={isClient} />
-      <div className="mt-5 grid sm:grid-cols-3 p-1 lg:grid-cols-4 2xl:grid-cols-5">
-        {products && products?.map((product: ProductWithFavorites) => (
-          <div key={product?.id}>
-            <CardProduct
-              product={product}
-              isClient={isClient}
-              setAlertMessage={setAlertMessage}
-              openAlert={setShowAlert}
-              products={products}
-              setProducts={setProducts}
-              productFavorites={productFavorites}
-              setProductFavorites={setProductFavorites}
+      {loading ? (<Loading />) : (
+        <>
+          <Header isClient={isClient} />
+          <Filters
+            products={products}
+            setProducts={setProductsFilters}
+            favorites={productFavorites}
+            isClient={isClient}
+          />
+          <div>
+          </div>
+          <div className="mt-5 grid sm:grid-cols-3 p-1 lg:grid-cols-4 2xl:grid-cols-5">
+            {productsFilters && productsFilters?.map((product: ProductWithFavorites) => (
+              <div key={product?.id}>
+                <CardProduct
+                  product={product}
+                  isClient={isClient}
+                  setAlertMessage={setAlertMessage}
+                  openAlert={setShowAlert}
+                  products={productsFilters}
+                  setProducts={setProductsFilters}
+                  productFavorites={productFavorites}
+                  setProductFavorites={setProductFavorites}
+                />
+              </div>
+            ))}
+            <Alert
+              message={alertMessage}
+              onClose={handleAlertClose}
+              showAlert={showAlert}
+              setShowAlert={setShowAlert}
             />
           </div>
-        ))}
-        <Alert
-          message={alertMessage}
-          onClose={handleAlertClose}
-          showAlert={showAlert}
-          setShowAlert={setShowAlert}
-        />
-      </div>
+        </>
+      )}
+
+
     </>
   )
 }
