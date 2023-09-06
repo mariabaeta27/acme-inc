@@ -23,6 +23,16 @@ export type Product = {
   image: string;
 }
 
+
+export type ProductWithFavorites = {
+  id: any;
+  name: string;
+  description: string;
+  value: string;
+  image: string;
+  isFavorite: boolean;
+}
+
 export type Client = { id: number, name: string, email: string }
 
 export type ClientComplet = {

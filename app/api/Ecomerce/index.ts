@@ -52,11 +52,26 @@ const addProductFavorites = (product: Product) => {
       message: `Falha ao adicionar produto ${product?.name} aos favovitos`
     }
   }
+}
 
+const removeProductFavotrites = (product: Product) => {
+  try {
+    const clientLogged = localStorage.getItem('clientLogged')
+    const client = clientLogged && JSON.parse(clientLogged)
 
+    const favoritesArray = client?.favorites.filter((fav: Product) => fav.id !== product.id)
 
-  console.log(product)
-
+    localStorage.setItem('clientLogged', JSON.stringify({ ...client, favorites: [...favoritesArray] }))
+    return {
+      status: 200,
+      message: `Produto ${product?.name} removido dos favoritos com sucesso`
+    }
+  } catch (error) {
+    return {
+      status: 400,
+      message: `Falha ao remover produto ${product?.name} dos favovitos`
+    }
+  }
 }
 
 
@@ -64,4 +79,4 @@ const addProductFavorites = (product: Product) => {
 
 
 
-export { postCart, clearCart, addProductFavorites }
+export { postCart, clearCart, addProductFavorites, removeProductFavotrites }

@@ -62,7 +62,7 @@ const logout = () => {
   const clients = bdClients && JSON.parse(bdClients)
 
   const newClients = clients.map((clientArr: ClientComplet) => {
-    if (client.id === clientArr.id) {
+    if (client?.id === clientArr?.id) {
       return {
         ...clientArr,
         favorites: [...clientArr.favorites, ...client.favorites],
@@ -73,10 +73,8 @@ const logout = () => {
     }
   })
 
-  console.log(newClients)
   localStorage.setItem('bdClients', JSON.stringify(newClients))
-
-  // localStorage.removeItem('clientLogged')
+  localStorage.removeItem('clientLogged')
 }
 
 

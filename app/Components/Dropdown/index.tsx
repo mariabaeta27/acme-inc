@@ -15,7 +15,7 @@ const Dropdown = ({ data }: { data: Client }) => {
     logout()
     clearCart()
     setIsOpen(!isOpen);
-    // window.location.reload();
+    window.location.reload();
   }
 
   return (
