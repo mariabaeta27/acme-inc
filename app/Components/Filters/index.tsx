@@ -27,6 +27,7 @@ const Filters = ({
   const handleCheckboxChange = (e: any) => {
     const { checked } = e.target
     setIsChecked(checked);
+    setSearch('')
     if (checked) {
       setProducts(favorites)
     } else {
@@ -40,10 +41,13 @@ const Filters = ({
     const { value } = e.target
     setSearch(value)
     let filterProducts: any;
+
+    const productsForFilter = isChecked ? favorites : products
+
     if (value) {
-      filterProducts = products?.filter((product) => product?.name.toLocaleLowerCase().startsWith(value.toLocaleLowerCase()))
+      filterProducts = productsForFilter?.filter((product) => product?.name.toLocaleLowerCase().startsWith(value.toLocaleLowerCase()))
     } else {
-      filterProducts = products
+      filterProducts = productsForFilter
     }
     setProducts(filterProducts)
   }
