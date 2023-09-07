@@ -6,8 +6,8 @@ import { Client, Message, Product, ProductWithFavorites } from "../types/types"
 import { Alert, CardProduct, Filters, Header, Loading } from "./Components"
 
 
-const Home = () => {
 
+const Home = () => {
   const [products, setProducts] = useState<ProductWithFavorites[] | Product[] | null>()
   const [productFavorites, setProductFavorites] = useState<ProductWithFavorites[] | null>()
   const [productsFilters, setProductsFilters] = useState<ProductWithFavorites[] | Product[] | null>()

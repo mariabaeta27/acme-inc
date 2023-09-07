@@ -5,6 +5,7 @@ import { Client, Product, ProductWithFavorites } from "../../../types/types"
 import Button from "../Button"
 import { addProductFavorites, postCart, removeProductFavotrites } from "../../api/Ecomerce"
 import { useState } from "react"
+import Link from "next/link"
 
 const CardProduct = ({
   product,
@@ -16,6 +17,7 @@ const CardProduct = ({
   favorites,
   setProductFavorites,
   isChecked,
+
 }:
   {
     product: ProductWithFavorites,
@@ -26,7 +28,8 @@ const CardProduct = ({
     setProducts: any,
     favorites: Product[],
     setProductFavorites: any,
-    isChecked: boolean
+    isChecked: boolean,
+
   }) => {
 
 
@@ -44,7 +47,6 @@ const CardProduct = ({
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
-
 
   const handleFavorite = (productSelect: ProductWithFavorites) => {
     const newProducts = products?.map((product: ProductWithFavorites) => {
@@ -76,7 +78,10 @@ const CardProduct = ({
   }
 
   return (
-    <div className="m-3 rounded-md shadow-sm w-auto h-34 flex bg-bege/35 hover:shadow-md bg-green-ligth/30">
+    <div
+      className="m-3 rounded-md shadow-sm w-auto h-34 flex bg-bege/35 hover:shadow-md bg-green-ligth/30"
+      key={product?.id}
+    >
       <div className=" mr-2">
         <img
           src={product?.image}
@@ -87,7 +92,9 @@ const CardProduct = ({
         />
       </div>
       <div className="w-60 overflow-hidden">
-        <p className="text-lg text-green font-semibold mb-1.5">{product?.name}</p>
+        <Link href={`/product/${product.id}`}>
+          <p className="text-lg text-green font-semibold mb-1.5">{product?.name}</p>
+        </Link>
         <p className="line-clamp-2 text-xs text-justify text-gray mr-2">{product?.description}</p>
         <p className="text-end mt-3 mr-2 font-bold text-green">R${product?.value}</p>
         <div className="flex">

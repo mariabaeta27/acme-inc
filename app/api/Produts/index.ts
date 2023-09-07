@@ -2,6 +2,7 @@ import { adjectives, verbs } from "../../utils/constants"
 import { randomNumber, randomDescription, randomImage } from "../../utils/functions"
 import { v4 as uuidv4 } from 'uuid';
 import { LoremIpsum } from "lorem-ipsum";
+import { Product } from "../../../types/types";
 
 
 
@@ -40,4 +41,11 @@ const getProducts = async () => {
   return products
 }
 
-export { getProducts }
+
+const getProduct = async (id: any) => {
+  const products = await createdProduct()
+  const product = products.filter((prod: Product) => prod?.id === id)
+  return product[0]
+}
+
+export { getProducts, getProduct }
