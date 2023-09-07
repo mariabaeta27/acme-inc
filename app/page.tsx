@@ -15,6 +15,7 @@ const Home = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<Message | null>()
   const [loading, setLoading] = useState(true)
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleAlertClose = () => {
     setShowAlert(true);
@@ -25,22 +26,21 @@ const Home = () => {
     const client = localStorage.getItem('clientLogged')
     setIsClient(client && JSON.parse(client))
     const favorites = client && JSON.parse(client).favorites
-
     const fetchProducts = async () => {
       const products = await getProducts();
-
       if (favorites?.lenght !== 0) {
         const newProducts = products?.map((product: Product) => {
           const isFavorite = favorites?.some((fav: Product) => fav.id === product.id)
-
           return {
             ...product,
             isFavorite: isFavorite || false
           }
         })
         setProducts(newProducts)
-        setProductFavorites(newProducts)
-        setProductsFilters(newProducts)
+
+        const newFavorites = newProducts.filter((product: ProductWithFavorites) => product.isFavorite)
+        setProductFavorites(favorites)
+        setProductsFilters(isChecked ? newFavorites : newProducts)
       } else {
         setProducts(products)
       }
@@ -48,6 +48,7 @@ const Home = () => {
     fetchProducts()
     setLoading(false)
   }, [])
+
 
 
   return (
@@ -60,11 +61,17 @@ const Home = () => {
             setProducts={setProductsFilters}
             favorites={productFavorites}
             isClient={isClient}
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
           />
           <div>
           </div>
           <div className="mt-5 grid sm:grid-cols-3 p-1 lg:grid-cols-4 2xl:grid-cols-5">
-            {productsFilters && productsFilters?.map((product: ProductWithFavorites) => (
+            {!productsFilters || productsFilters.length === 0 ? (
+              <div className="flex justify-center items-center w-screen">
+                <p className="text-center text-green text-lg font-bold">Não há produtos para serem exebidos</p>
+              </div>
+            ) : productsFilters?.map((product: ProductWithFavorites) => (
               <div key={product?.id}>
                 <CardProduct
                   product={product}
@@ -73,8 +80,9 @@ const Home = () => {
                   openAlert={setShowAlert}
                   products={productsFilters}
                   setProducts={setProductsFilters}
-                  productFavorites={productFavorites}
+                  favorites={productFavorites}
                   setProductFavorites={setProductFavorites}
+                  isChecked={isChecked}
                 />
               </div>
             ))}
@@ -87,8 +95,6 @@ const Home = () => {
           </div>
         </>
       )}
-
-
     </>
   )
 }

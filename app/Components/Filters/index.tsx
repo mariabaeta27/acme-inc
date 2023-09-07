@@ -11,24 +11,24 @@ const Filters = ({
   setProducts,
   favorites,
   isClient,
+  isChecked,
+  setIsChecked
 }: {
   products: ProductWithFavorites[] | Product[],
   setProducts: any,
-  favorites: ProductWithFavorites[]
-  isClient: Client
+  favorites: ProductWithFavorites[],
+  isClient: Client,
+  isChecked: boolean,
+  setIsChecked: any
 }) => {
 
   const [search, setSearch] = useState<string>('')
 
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = (e: any) => {
     const { checked } = e.target
-    console.log(checked)
     setIsChecked(checked);
     if (checked) {
-      setProducts()
+      setProducts(favorites)
     } else {
       setProducts(products)
     }
@@ -39,7 +39,7 @@ const Filters = ({
   const handleFilterChange = (e: any) => {
     const { value } = e.target
     setSearch(value)
-    let filterProducts;
+    let filterProducts: any;
     if (value) {
       filterProducts = products?.filter((product) => product?.name.toLocaleLowerCase().startsWith(value.toLocaleLowerCase()))
     } else {
@@ -58,12 +58,15 @@ const Filters = ({
         className="m-0"
         value={search}
         icon={
-          <XMarkIcon className='m-0 p-0 text-start h-3 w-3'
+          <button
+            className="m-0 p-0 text-start h-3 w-3"
             onClick={() => {
               setSearch(''),
                 setProducts(products)
             }}
-          />
+          >
+            <XMarkIcon />
+          </button>
         }
       />
       <Input
@@ -72,7 +75,7 @@ const Filters = ({
         name="checkbox"
         type="checkbox"
         checked={isChecked}
-        className={`w-10 rounded mb-0  form-checkbox checked:bg-blue-500 checked:bg-green sm:w-48`}
+        className={`w-10 rounded mb-0  form-checkbox checked:bg-blue-500 checked:bg-green sm:w-52`}
         onChange={handleCheckboxChange}
       />
     </div>

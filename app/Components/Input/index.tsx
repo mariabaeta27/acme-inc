@@ -32,7 +32,7 @@ const Input = ({
       <input
         checked={checked}
         placeholder={placeholder}
-        value={value && value}
+        value={value}
         onChange={onChange}
         disabled={disabled}
         type={type}

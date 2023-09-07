@@ -13,8 +13,9 @@ const CardProduct = ({
   openAlert,
   products,
   setProducts,
-  productFavorites,
+  favorites,
   setProductFavorites,
+  isChecked,
 }:
   {
     product: ProductWithFavorites,
@@ -23,8 +24,9 @@ const CardProduct = ({
     openAlert: any,
     products: ProductWithFavorites[] | Product[],
     setProducts: any,
-    productFavorites: Product[],
-    setProductFavorites: any
+    favorites: Product[],
+    setProductFavorites: any,
+    isChecked: boolean
   }) => {
 
 
@@ -44,46 +46,42 @@ const CardProduct = ({
   };
 
 
-  const addFavorites = (productFav: ProductWithFavorites) => {
+  const handleFavorite = (productSelect: ProductWithFavorites) => {
 
-    const newProducts = products?.map((productEdit: ProductWithFavorites) => {
-      if (productFav?.id === productEdit?.id) {
+    const newProducts = products?.map((product: ProductWithFavorites) => {
+      if (product.id === productSelect.id) {
         return {
-          ...productEdit,
-          isFavorite: !productEdit?.isFavorite
+          ...productSelect,
+          isFavorite: !productSelect.isFavorite
         }
-      }
-      return {
-        ...productEdit
+      } else {
+        return product
       }
     })
     setProducts(newProducts)
-
     if (isFavorite) {
-      setProductFavorites([...productFavorites, { productFav }])
-      delete productFav.isFavorite
-      const result = removeProductFavotrites(productFav)
-      setAlertMessage(result)
-      openAlert(true)
-    } else {
-      const newFavorites = productFavorites?.filter((fav) => fav.id !== productFav.id)
+      const newFavorites = favorites.filter((productFavorite) => productFavorite.id !== productSelect.id)
       setProductFavorites(newFavorites)
-      delete productFav.isFavorite
-      const result = addProductFavorites(productFav)
+      isChecked && setProducts(newFavorites)
+      delete product.isFavorite
+      const result = removeProductFavotrites(productSelect)
       setAlertMessage(result)
-      openAlert(true)
+    } else {
+      delete product.isFavorite
+      setProductFavorites([...favorites, { ...productSelect }])
+      const result = addProductFavorites(productSelect)
+      setAlertMessage(result)
     }
-
     toggleFavorite()
   }
 
   return (
-    <div className="m-3 rounded-md shadow-md w-auto h-34 flex bg-bege/35 hover:shadow-xl ">
+    <div className="m-3 rounded-md shadow-sm w-auto h-34 flex bg-bege/35 hover:shadow-md bg-green-ligth/30">
       <div className=" mr-2">
         <img
           src={product?.image}
           alt={product?.name}
-          className="h-32 w-40 rounded-md"
+          className="h-32 w-40 rounded-md ml-0.5 mt-0.5"
           width='auto'
           height='auto'
         />
@@ -94,7 +92,7 @@ const CardProduct = ({
         <p className="text-end mt-3 mr-2 font-bold text-green">R${product?.value}</p>
         <div className="flex">
           <Button text="Adicionar ao carrinho" type="button" className="text-xs my-3" onClick={() => addProductCart(product)} />
-          <button onClick={() => addFavorites(product)} disabled={!isClient ? true : false}>
+          <button onClick={() => handleFavorite(product)} disabled={!isClient ? true : false}>
             {heartIcon}
           </button>
         </div>
