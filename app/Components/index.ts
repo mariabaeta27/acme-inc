@@ -6,7 +6,8 @@ import Header from './Header'
 import Alert from './Alert'
 import Filters from './Filters'
 import Loading from './Loading'
+import Cart from './Cart'
 
 
 
-export { RegisterComponent, CardLoginRegister, LoginComponent, CardProduct, Header, Alert, Filters, Loading }
+export { RegisterComponent, CardLoginRegister, LoginComponent, CardProduct, Header, Alert, Filters, Loading, Cart }

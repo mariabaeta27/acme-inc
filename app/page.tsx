@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { getProducts } from "./api/Produts"
 import { Client, Message, Product, ProductWithFavorites } from "../types/types"
-import { Alert, CardProduct, Filters, Header, Loading } from "./Components"
+import { Alert, CardProduct, Cart, Filters, Header, Loading } from "./Components"
 
 
 
@@ -16,11 +16,8 @@ const Home = () => {
   const [alertMessage, setAlertMessage] = useState<Message | null>()
   const [loading, setLoading] = useState(true)
   const [isChecked, setIsChecked] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const handleAlertClose = () => {
-    setShowAlert(true);
-    setAlertMessage(null)
-  };
 
   useEffect(() => {
     setLoading(true)
@@ -50,13 +47,22 @@ const Home = () => {
     setLoading(false)
   }, [])
 
+  const handleAlertClose = () => {
+    setShowAlert(true);
+    setAlertMessage(null)
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerOpen(false);
+  };
+
 
 
   return (
     <>
       {loading ? (<Loading />) : (
         <>
-          <Header isClient={isClient} />
+          <Header isClient={isClient} setIsDrawerOpen={setIsDrawerOpen} />
           <Filters
             products={products}
             setProducts={setProductsFilters}
@@ -64,6 +70,7 @@ const Home = () => {
             isClient={isClient}
             isChecked={isChecked}
             setIsChecked={setIsChecked}
+
           />
           <div>
           </div>
@@ -94,6 +101,10 @@ const Home = () => {
               showAlert={showAlert}
               setShowAlert={setShowAlert}
             />)}
+
+            <div>
+              <Cart isOpen={isDrawerOpen} onClose={closeDrawer} />
+            </div>
 
           </div>
         </>

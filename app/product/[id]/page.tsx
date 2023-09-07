@@ -7,7 +7,7 @@ import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid"
 import { ChevronLeftIcon, HeartIcon } from "@heroicons/react/24/outline"
 import { addProductFavorites, postCart, removeProductFavotrites } from '../../api/Ecomerce';
 import Button from '../../Components/Button';
-import { Alert, Loading } from '../../Components';
+import { Alert, Cart, Loading } from '../../Components';
 import IconcCart from '../../Components/IconCart';
 
 const Product = () => {
@@ -18,6 +18,7 @@ const Product = () => {
   const [alertMessage, setAlertMessage] = useState<Message | null>()
   const [showAlert, setShowAlert] = useState(false);
   const [isFavorite, setIsFavorite] = useState(product?.isFavorite);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const router = useRouter()
 
   useEffect(() => {
@@ -68,6 +69,10 @@ const Product = () => {
     toggleFavorite()
   }
 
+  const closeDrawer = () => {
+    setIsDrawerOpen(false);
+  };
+
   return (
 
 
@@ -82,7 +87,7 @@ const Product = () => {
                 <button onClick={() => router.back()} disabled={!isClient ? true : false}>
                   <ChevronLeftIcon className='h-5 w-5 text-green' />
                 </button>
-                <IconcCart />
+                <IconcCart setIsDrawerOpen={setIsDrawerOpen} />
               </div>
               <div className='mb-3 sm:mb-0 sm:col-span-1 '>
                 <p className="text-lg text-green font-medium mb-1.5">{product?.name}</p>
@@ -115,6 +120,7 @@ const Product = () => {
                     setShowAlert={setShowAlert}
                   />)
               }
+              <Cart isOpen={isDrawerOpen} onClose={closeDrawer} />
             </div>)
 
       }
