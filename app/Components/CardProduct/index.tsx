@@ -47,7 +47,6 @@ const CardProduct = ({
 
 
   const handleFavorite = (productSelect: ProductWithFavorites) => {
-
     const newProducts = products?.map((product: ProductWithFavorites) => {
       if (product.id === productSelect.id) {
         return {
@@ -72,6 +71,7 @@ const CardProduct = ({
       const result = addProductFavorites(productSelect)
       setAlertMessage(result)
     }
+    openAlert(true)
     toggleFavorite()
   }
 

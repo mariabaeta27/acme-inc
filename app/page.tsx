@@ -19,6 +19,7 @@ const Home = () => {
 
   const handleAlertClose = () => {
     setShowAlert(true);
+    setAlertMessage(null)
   };
 
   useEffect(() => {
@@ -86,12 +87,14 @@ const Home = () => {
                 />
               </div>
             ))}
-            <Alert
+
+            {alertMessage && (<Alert
               message={alertMessage}
               onClose={handleAlertClose}
               showAlert={showAlert}
               setShowAlert={setShowAlert}
-            />
+            />)}
+
           </div>
         </>
       )}
