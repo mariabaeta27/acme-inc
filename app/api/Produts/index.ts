@@ -48,4 +48,48 @@ const getProduct = async (id: any) => {
   return product[0]
 }
 
-export { getProducts, getProduct }
+
+const addProductFavorites = (product: Product) => {
+  try {
+    const clientLogged = localStorage.getItem('clientLogged')
+    const client = clientLogged && JSON.parse(clientLogged)
+    let favoritesArray;
+    if (client?.favorites.length !== 0) {
+      favoritesArray = [...client?.favorites, { ...product }]
+    } else {
+      favoritesArray = [{ ...product }]
+    }
+    localStorage.setItem('clientLogged', JSON.stringify({ ...client, favorites: [...favoritesArray] }))
+    return {
+      status: 200,
+      message: `Produto ${product?.name} adicionado ao favoritos com sucesso`
+    }
+  } catch (error) {
+    return {
+      status: 400,
+      message: `Falha ao adicionar produto ${product?.name} aos favovitos`
+    }
+  }
+}
+
+const removeProductFavotrites = (product: Product) => {
+  try {
+    const clientLogged = localStorage.getItem('clientLogged')
+    const client = clientLogged && JSON.parse(clientLogged)
+
+    const favoritesArray = client?.favorites.filter((fav: Product) => fav.id !== product.id)
+
+    localStorage.setItem('clientLogged', JSON.stringify({ ...client, favorites: [...favoritesArray] }))
+    return {
+      status: 200,
+      message: `Produto ${product?.name} removido dos favoritos com sucesso`
+    }
+  } catch (error) {
+    return {
+      status: 400,
+      message: `Falha ao remover produto ${product?.name} dos favovitos`
+    }
+  }
+}
+
+export { getProducts, getProduct, addProductFavorites, removeProductFavotrites }

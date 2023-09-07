@@ -27,56 +27,32 @@ const postCart = (product: Product) => {
 
 
 const clearCart = () => {
-  localStorage.removeItem('bdCart')
-}
+  const clientLogged = localStorage.getItem('clientLogged')
+  const client = clientLogged && JSON.parse(clientLogged)
 
-
-const addProductFavorites = (product: Product) => {
-  try {
-    const clientLogged = localStorage.getItem('clientLogged')
-    const client = clientLogged && JSON.parse(clientLogged)
-    let favoritesArray;
-    if (client?.favorites.length !== 0) {
-      favoritesArray = [...client?.favorites, { ...product }]
-    } else {
-      favoritesArray = [{ ...product }]
+  if (client) {
+    console.log(client)
+    const newClient = {
+      ...client,
+      productsCart: []
     }
-    localStorage.setItem('clientLogged', JSON.stringify({ ...client, favorites: [...favoritesArray] }))
-    return {
-      status: 200,
-      message: `Produto ${product?.name} adicionado ao favoritos com sucesso`
-    }
-  } catch (error) {
-    return {
-      status: 400,
-      message: `Falha ao adicionar produto ${product?.name} aos favovitos`
-    }
-  }
-}
-
-const removeProductFavotrites = (product: Product) => {
-  try {
-    const clientLogged = localStorage.getItem('clientLogged')
-    const client = clientLogged && JSON.parse(clientLogged)
-
-    const favoritesArray = client?.favorites.filter((fav: Product) => fav.id !== product.id)
-
-    localStorage.setItem('clientLogged', JSON.stringify({ ...client, favorites: [...favoritesArray] }))
-    return {
-      status: 200,
-      message: `Produto ${product?.name} removido dos favoritos com sucesso`
-    }
-  } catch (error) {
-    return {
-      status: 400,
-      message: `Falha ao remover produto ${product?.name} dos favovitos`
-    }
+    localStorage.setItem('clientLogged', JSON.stringify({ ...newClient }))
+  } else {
+    localStorage.removeItem('bdCart')
   }
 }
 
 
 
 
+const getProductsCart = () => {
+  const products = localStorage.getItem('bdCart')
+  return products && JSON.parse(products)
+}
 
 
-export { postCart, clearCart, addProductFavorites, removeProductFavotrites }
+
+
+
+
+export { postCart, clearCart, getProductsCart }

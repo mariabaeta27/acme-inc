@@ -75,6 +75,7 @@ const logout = () => {
 
   localStorage.setItem('bdClients', JSON.stringify(newClients))
   localStorage.removeItem('clientLogged')
+  localStorage.removeItem('bdCart')
 }
 
 

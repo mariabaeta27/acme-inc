@@ -3,9 +3,10 @@ import { HeartIcon } from "@heroicons/react/24/outline"
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid"
 import { Client, Product, ProductWithFavorites } from "../../../types/types"
 import Button from "../Button"
-import { addProductFavorites, postCart, removeProductFavotrites } from "../../api/Ecomerce"
+import { postCart } from "../../api/Ecomerce"
 import { useState } from "react"
 import Link from "next/link"
+import { addProductFavorites, removeProductFavotrites } from "../../api/Produts"
 
 const CardProduct = ({
   product,

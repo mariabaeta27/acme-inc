@@ -1,11 +1,11 @@
 'use client'
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getProduct } from '../../api/Produts';
+import { addProductFavorites, getProduct, removeProductFavotrites } from '../../api/Produts';
 import { Message, Product, ProductWithFavorites } from '../../../types/types';
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid"
 import { ChevronLeftIcon, HeartIcon } from "@heroicons/react/24/outline"
-import { addProductFavorites, postCart, removeProductFavotrites } from '../../api/Ecomerce';
+import { postCart } from '../../api/Ecomerce';
 import Button from '../../Components/Button';
 import { Alert, Cart, Loading } from '../../Components';
 import IconcCart from '../../Components/IconCart';
