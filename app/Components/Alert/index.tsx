@@ -21,7 +21,7 @@ const Alert = ({ onClose, message, showAlert, setShowAlert }: { onClose: any, me
 
     <>
       {showAlert && (
-        <div className={`fixed top-0 right-0 mt-12 mr-5 p-3 w-auto rounded bg-green-500/10 shadow-lg flex ${styleAlert}`}>
+        <div className={`fixed top-0 right-0 mt-12 mr-2 p-1 w-auto rounded bg-green-500/70 shadow-lg flex ${styleAlert}`}>
           <p className="text-green text-sm">{message?.message}!</p>
           <XMarkIcon className="text-green h-3 w-3 ml-1" onClick={() => setShowAlert(false)} />
         </div>
