@@ -29,20 +29,44 @@ const postCart = (product: Product) => {
 const clearCart = () => {
   const clientLogged = localStorage.getItem('clientLogged')
   const client = clientLogged && JSON.parse(clientLogged)
-
   if (client) {
-    console.log(client)
     const newClient = {
       ...client,
       productsCart: []
     }
     localStorage.setItem('clientLogged', JSON.stringify({ ...newClient }))
-  } else {
-    localStorage.removeItem('bdCart')
   }
+  localStorage.removeItem('bdCart')
 }
 
 
+const deleteProductCart = (product: Product) => {
+  const clientLogged = localStorage.getItem('clientLogged')
+  const client = clientLogged && JSON.parse(clientLogged)
+  const bdCart = localStorage.getItem('bdCart')
+  const cart = bdCart && JSON.parse(bdCart)
+  try {
+    const newCart = cart.filter((prod: Product) => prod?.id !== product.id)
+    if (client) {
+      const newClient = {
+        ...client,
+        productsCart: newCart
+
+      }
+      localStorage.setItem('clientLogged', JSON.stringify(newClient))
+    }
+    localStorage.setItem('bdCart', JSON.stringify(newCart))
+    return {
+      status: 200,
+      message: `Produto ${product?.name} removido do carrinho com sucesso`
+    }
+  } catch (erro) {
+    return {
+      status: 400,
+      message: `Falha ao remover produto ${product?.name} do carrinho`
+    }
+  }
+}
 
 
 const getProductsCart = () => {
@@ -55,4 +79,4 @@ const getProductsCart = () => {
 
 
 
-export { postCart, clearCart, getProductsCart }
+export { postCart, clearCart, getProductsCart, deleteProductCart }

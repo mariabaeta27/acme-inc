@@ -12,7 +12,7 @@ const Alert = ({ onClose, message, showAlert, setShowAlert }: { onClose: any, me
     const timer = setTimeout(() => {
       setShowAlert(false)
       onClose();
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [message]);

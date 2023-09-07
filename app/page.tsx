@@ -95,12 +95,13 @@ const Home = () => {
               </div>
             ))}
 
-            {alertMessage && (<Alert
-              message={alertMessage}
-              onClose={handleAlertClose}
-              showAlert={showAlert}
-              setShowAlert={setShowAlert}
-            />)}
+            {alertMessage && (
+              <Alert
+                message={alertMessage}
+                onClose={handleAlertClose}
+                showAlert={showAlert}
+                setShowAlert={setShowAlert}
+              />)}
 
             <div>
               <Cart isOpen={isDrawerOpen} onClose={closeDrawer} />

@@ -1,7 +1,9 @@
+'use client'
+
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Product } from "../../../types/types";
 
-const ItemCart = ({ product }: { product: Product }) => {
+const ItemCart = ({ product, removeProduct }: { product: Product, removeProduct: any }) => {
 
   return (
     <div
@@ -21,8 +23,12 @@ const ItemCart = ({ product }: { product: Product }) => {
       <div className="w-auto grid  grid-cols-4  justify-center pt-2">
         <p className="text-green  mr-2 w-40  col-span-2">{product?.name}</p>
         <p className="font-semibold text-green w-18">R${product?.value}</p>
-        <XMarkIcon className="h-5 w-5 text-green ml-5 mt-1" onClick={() => console.log('Remover')} />
+        <XMarkIcon className="h-5 w-5 text-green ml-5 mt-1" onClick={() => removeProduct(product)} />
       </div>
+
+
+
+
     </div>
   )
 }
