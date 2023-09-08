@@ -33,10 +33,10 @@ const getClient = (data: InputsLogin) => {
   const bgClients = localStorage.getItem('bdClients')
   const isClient = bgClients && JSON.parse(bgClients)?.some((client: InputsResgister) => client.email === data.email)
   const client = bgClients && JSON.parse(bgClients)?.filter((client: InputsResgister) => client.email === data.email && client.password === data.password)
-  localStorage.setItem('bdCart', JSON.stringify(client[0]?.productsCart))
 
   try {
     if (!isClient) {
+      localStorage.setItem('bdCart', JSON.stringify(client[0]?.productsCart))
       throw new Error('Email não cadastrado')
     } else if (isClient && (!bgClients || client.length === 0)) {
       throw new Error('Email ou senha informados não conferem')
