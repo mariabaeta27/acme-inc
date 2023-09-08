@@ -33,7 +33,6 @@ const CardProduct = ({
 
   }) => {
 
-
   const [isFavorite, setIsFavorite] = useState(product?.isFavorite);
 
   const isClientStyle = isClient ? 'text-green' : 'text-green-ligth'

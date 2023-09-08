@@ -21,27 +21,27 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true)
-    const client = localStorage.getItem('clientLogged')
-    setIsClient(client && JSON.parse(client))
-    const favorites = client && JSON.parse(client).favorites
-    const fetchProducts = async () => {
-      const products = await getProducts();
-      if (favorites?.lenght !== 0) {
-        const newProducts = products?.map((product: Product) => {
-          const isFavorite = favorites?.some((fav: Product) => fav.id === product.id)
-          return {
-            ...product,
-            isFavorite: isFavorite || false
-          }
-        })
-        setProducts(newProducts)
+    const clientLogged = localStorage.getItem('clientLogged')
+    const client = JSON.parse(clientLogged)
+    setIsClient(client && client)
+    const favorites = clientLogged && client.favorites
 
-        const newFavorites = newProducts.filter((product: ProductWithFavorites) => product.isFavorite)
-        setProductFavorites(favorites)
-        setProductsFilters(isChecked ? newFavorites : newProducts)
-      } else {
-        setProducts(products)
-      }
+
+
+    const fetchProducts = async () => {
+      const bdProducts = await getProducts();
+      const newProducts = bdProducts?.map((product: Product) => {
+        const isFavorite = favorites?.some((fav: Product) => fav.id === product.id)
+        return {
+          ...product,
+          isFavorite: isFavorite || false
+        }
+      })
+      const newFavorites = newProducts?.filter((product: ProductWithFavorites) => product.isFavorite)
+      console.log(newProducts)
+      setProducts(newProducts)
+      setProductsFilters(newProducts)
+      setProductFavorites(newFavorites)
     };
     fetchProducts()
     setLoading(false)

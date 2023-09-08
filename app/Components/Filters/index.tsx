@@ -52,6 +52,15 @@ const Filters = ({
     setProducts(filterProducts)
   }
 
+  const clearInputFilter = () => {
+    setSearch('')
+    if (isChecked) {
+      setProducts(favorites)
+    } else {
+      setProducts(products)
+    }
+  }
+
   return (
     <div className="flex flex-col justify-center items-center ">
       <Input
@@ -64,10 +73,7 @@ const Filters = ({
         icon={
           <button
             className="m-0 p-0 text-start h-3 w-3"
-            onClick={() => {
-              setSearch(''),
-                setProducts(products)
-            }}
+            onClick={clearInputFilter}
           >
             <XMarkIcon />
           </button>
