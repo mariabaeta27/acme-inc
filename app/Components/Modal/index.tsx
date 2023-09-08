@@ -7,7 +7,7 @@ const Modal = (
     { isOpen: boolean, onClose: any, message?: Message, button?: string, onClick?: any }) => {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-x-0 mt-24 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="fixed inset-x-0 mt-40 sm:mt-96 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
 
       <div className="bg-white p-8 rounded-lg shadow-md relative">
         <div className='flex flex-col items-center'>

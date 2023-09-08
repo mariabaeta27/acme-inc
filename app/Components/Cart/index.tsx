@@ -29,7 +29,7 @@ const Cart = ({ isOpen, onClose }) => {
       let countReult = 0;
 
       products?.forEach(element => {
-        countReult = countReult + parseFloat(element.value)
+        countReult = +(countReult + parseFloat(element.value)).toFixed(2)
       });
       setCount(countReult)
 
@@ -42,8 +42,8 @@ const Cart = ({ isOpen, onClose }) => {
   const removeProduct = (productSelect: any) => {
     deleteProductCart(productSelect)
     const newProducts = products?.filter((prod) => prod.id !== productSelect.id)
-    const newCount = count - parseFloat(productSelect.value)
-    setCount(newCount)
+    const newCount = (count - parseFloat(productSelect.value)).toFixed(2)
+    setCount(+newCount)
     setProducts(newProducts)
   }
 
@@ -75,12 +75,23 @@ const Cart = ({ isOpen, onClose }) => {
         if (!buysSalve || buysSalve?.length === 0) {
           localStorage.setItem('bdBuys', JSON.stringify([{ client: { name: isClient.name, clientId: isClient.id }, buys: buys, value: count }]))
         } else {
-          localStorage.setItem('bdBuys', JSON.stringify([...JSON.parse(bdBuys), { client: { name: isClient.name, clientId: isClient.id }, buys: buys, value: count }]))
+          localStorage.setItem('bdBuys', JSON.stringify([...JSON.parse(bdBuys), { client: { name: isClient.name, clientId: isClient.id }, buys: buys, valueBuys: count }]))
         }
         setProducts(notBuys)
         localStorage.setItem('bdCart', JSON.stringify(notBuys))
         localStorage.setItem('clientLogged', JSON.stringify({ ...isClient, productsCart: notBuys }))
-        onClose()
+        setMessage({
+          status: 200,
+          message: 'Compra finalizada com sucesso!'
+        })
+        setOpenModal(true)
+        const timer = setTimeout(() => {
+          onClose();
+          setOpenModal(false)
+          setMessage(null)
+        }, 2000);
+
+        return () => clearTimeout(timer);
       } else {
         setMessage({
           status: 400,
@@ -117,6 +128,17 @@ const Cart = ({ isOpen, onClose }) => {
           <div
             className="h-full flex flex-col bg-white shadow-xl"
           >
+            {
+              (message && openModal) && (
+                <Modal
+                  isOpen={openModal}
+                  onClose={() => { setOpenModal(false), setMessage(null) }}
+                  message={message}
+                  button={!isClient && 'Login'}
+                  onClick={!isClient && redirect}
+                />
+              )
+            }
             <div className="p-4 ">
               <button
                 onClick={() => {
@@ -141,8 +163,11 @@ const Cart = ({ isOpen, onClose }) => {
                   )
                 }
               </div>
-              {count ? (
-                <p className="text-end font-bold text-green ">R${count}</p>
+              {products && products.length !== 0 && count ? (
+                <p className="text-end font-bold text-green">
+                  Total:
+                  <span className="ml-2">R${count}</span>
+                </p>
               ) : ''}
               <footer className="flex justify-around mt-5">
                 <Button disabled={!products || products?.length === 0} text="Finalizar" type="button" className="text-xs m-0 p-0" onClick={checkout} />
@@ -151,17 +176,6 @@ const Cart = ({ isOpen, onClose }) => {
                     onClose()
                 }} />
               </footer>
-              {
-                (message && openModal) && (
-                  <Modal
-                    isOpen={openModal}
-                    onClose={() => { setOpenModal(false), setMessage(null) }}
-                    message={message}
-                    button={!isClient && 'Login'}
-                    onClick={!isClient && redirect}
-                  />
-                )
-              }
 
             </div>
           </div>

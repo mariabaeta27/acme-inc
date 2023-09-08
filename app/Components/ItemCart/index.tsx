@@ -6,9 +6,7 @@ import Input from "../Input";
 import { useState } from "react";
 
 const ItemCart = ({ product, removeProduct, handleCheck }: { product: any, removeProduct: any, handleCheck: any }) => {
-
   const [isChecked, setIsChecked] = useState(product?.buy)
-
   return (
     <div
       className="m-3 flex w-auto rounded-md shadow-sm h-34  bg-bege/35 hover:shadow-md bg-green/10"
@@ -42,12 +40,6 @@ const ItemCart = ({ product, removeProduct, handleCheck }: { product: any, remov
           </div>
         </div>
       </div>
-
-
-
-
-
-
     </div>
   )
 }
