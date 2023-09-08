@@ -80,7 +80,7 @@ const CardProduct = ({
 
   return (
     <div
-      className="m-3 rounded-md shadow-sm w-68 h-34 flex bg-bege/35 hover:shadow-md bg-green-ligth/30"
+      className="m-3 rounded-md shadow-sm w-auto h-34 flex bg-bege/35 bg-green-ligth/30 hover:shadow-md"
       key={product?.id}
     >
       <div className=" mr-2">

@@ -56,8 +56,6 @@ const Home = () => {
     setIsDrawerOpen(false);
   };
 
-
-
   return (
     <>
       {loading ? (<Loading />) : (
@@ -73,26 +71,27 @@ const Home = () => {
           />
           <div>
           </div>
-          <div className="mt-5 grid sm:grid-cols-3 p-1 lg:grid-cols-4 2xl:grid-cols-5">
-            {!productsFilters || productsFilters.length === 0 ? (
+          <div className="mt-5 grid sm:grid-cols-3 p-1 lg:grid-cols-4 xl:grid-cols-5">
+            {(!productsFilters || productsFilters?.length === 0) ? (
               <div className="flex justify-center items-center w-screen">
                 <p className="text-center text-green text-lg font-bold">Não há produtos para serem exebidos</p>
               </div>
-            ) : productsFilters?.map((product: ProductWithFavorites) => (
-              <div key={product?.id}>
-                <CardProduct
-                  product={product}
-                  isClient={isClient}
-                  setAlertMessage={setAlertMessage}
-                  openAlert={setShowAlert}
-                  products={productsFilters}
-                  setProducts={setProductsFilters}
-                  favorites={productFavorites}
-                  setProductFavorites={setProductFavorites}
-                  isChecked={isChecked}
-                />
-              </div>
-            ))}
+            ) :
+              productsFilters?.map((product: ProductWithFavorites) => (
+                <div key={product?.id}>
+                  <CardProduct
+                    product={product}
+                    isClient={isClient}
+                    setAlertMessage={setAlertMessage}
+                    openAlert={setShowAlert}
+                    products={productsFilters}
+                    setProducts={setProductsFilters}
+                    favorites={productFavorites}
+                    setProductFavorites={setProductFavorites}
+                    isChecked={isChecked}
+                  />
+                </div>
+              ))}
 
             {alertMessage && (
               <Alert

@@ -28,8 +28,7 @@ const Cart = ({ isOpen, onClose }) => {
 
       let countReult = 0;
 
-      products.forEach(element => {
-        console.log(parseFloat(element.value))
+      products?.forEach(element => {
         countReult = countReult + parseFloat(element.value)
       });
       setCount(countReult)
@@ -95,7 +94,7 @@ const Cart = ({ isOpen, onClose }) => {
     } else {
       setMessage({
         status: 400,
-        message: 'Para prosseguir é necessrio efetuar o Login!'
+        message: 'Para prosseguir é necessário efetuar o Login!'
       })
       setOpenModal(true)
     }

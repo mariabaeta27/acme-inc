@@ -84,7 +84,7 @@ const Product = () => {
               className=" w-full sm:grid sm:grid-cols-4 lg:grid-cols-4 lg:gap-1 xl:grid-cols-5 xl:gap-2"
             >
               <div className='flex justify-between col-span-4 xl:col-span-5'>
-                <button onClick={() => router.back()} disabled={!isClient ? true : false}>
+                <button onClick={() => router.back()}>
                   <ChevronLeftIcon className='h-5 w-5 text-green' />
                 </button>
                 <IconcCart setIsDrawerOpen={setIsDrawerOpen} />

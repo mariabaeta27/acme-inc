@@ -79,7 +79,7 @@ const Filters = ({
         name="checkbox"
         type="checkbox"
         checked={isChecked}
-        className={`w-10 rounded mb-0  form-checkbox checked:bg-blue-500 checked:bg-green sm:w-52`}
+        className={`w-10 rounded mb-0  form-checkbox checked:bg-blue-500 checked:text-green sm:w-32 xl:w-10`}
         onChange={handleCheckboxChange}
       />
     </div>
