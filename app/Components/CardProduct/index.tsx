@@ -29,7 +29,6 @@ const CardProduct = ({
     favorites: Product[],
     setProductFavorites: any,
     isChecked: boolean,
-    setBuys: any,
   }) => {
 
   const [isFavorite, setIsFavorite] = useState(product?.isFavorite);
@@ -66,13 +65,9 @@ const CardProduct = ({
       const newFavorites = favorites.filter((productFavorite) => productFavorite.id !== productSelect.id)
       setProductFavorites(newFavorites)
       isChecked && setProducts(newFavorites)
-      delete product.isFavorite
-      delete product.buy
       const result = removeProductFavotrites(productSelect)
       setAlertMessage(result)
     } else {
-      delete product.isFavorite
-      delete product.buy
       setProductFavorites([...favorites, { ...productSelect }])
       const result = addProductFavorites(productSelect)
       setAlertMessage(result)

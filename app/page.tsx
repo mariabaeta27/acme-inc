@@ -17,16 +17,14 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   const [isChecked, setIsChecked] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [buys, setBuys] = useState()
-
 
   useEffect(() => {
     setLoading(true)
     const clientLogged = localStorage.getItem('clientLogged')
-    const client = JSON.parse(clientLogged)
+    const client = clientLogged && JSON.parse(clientLogged)
     setIsClient(client && client)
-    const favorites = clientLogged && client.favorites
-    const buys = clientLogged && client.productsCart
+    const favorites = client && client.favorites
+    const buys = client && client.productsCart
     const fetchProducts = async () => {
       const bdProducts = await getProducts();
       const newProducts = bdProducts?.map((product: Product) => {
@@ -38,9 +36,6 @@ const Home = () => {
           buy: isBusy || false
         }
       })
-
-      const newBuys = newProducts?.filter((product: ProductWithBuy) => product.buy)
-      setBuys(newBuys)
       const newFavorites = newProducts?.filter((product: ProductWithFavorites) => product.isFavorite)
       setProducts(newProducts)
       setProductsFilters(newProducts)
@@ -93,7 +88,6 @@ const Home = () => {
                     favorites={productFavorites}
                     setProductFavorites={setProductFavorites}
                     isChecked={isChecked}
-                    setBuys={setBuys}
                   />
                 </div>
               ))}

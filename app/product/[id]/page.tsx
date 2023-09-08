@@ -58,11 +58,9 @@ const Product = () => {
 
   const handleFavorite = (productSelect: ProductWithFavorites) => {
     if (isFavorite) {
-      delete product.isFavorite
       const result = removeProductFavotrites(productSelect)
       setAlertMessage(result)
     } else {
-      delete product.isFavorite
       const result = addProductFavorites(productSelect)
       setAlertMessage(result)
     }

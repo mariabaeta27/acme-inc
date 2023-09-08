@@ -22,6 +22,7 @@ const Cart = ({
   const [count, setCount] = useState<number>()
   const [buys, setBuys] = useState<any[]>()
 
+
   useEffect(() => {
     const client = localStorage.getItem('clientLogged')
     setIsClient(client && JSON.parse(client))
@@ -32,9 +33,9 @@ const Cart = ({
       setBuys(newProducts)
       let countReult = 0;
       result?.forEach((buy: any) => {
-        countReult = +(countReult + (parseFloat(buy?.value) * buy?.amount)).toFixed(2)
+        countReult = countReult + (parseFloat(buy?.value) * buy?.amount)
       });
-      setCount(countReult | 0)
+      setCount(countReult)
     }
     fetchProducts()
   }, [isOpen])
@@ -42,79 +43,84 @@ const Cart = ({
   const removeProduct = (productSelect: any) => {
     const updatedCart = deleteProductCart(productSelect)
     setBuys(updatedCart)
-    const newCount = (count - parseFloat(productSelect?.value)).toFixed(2)
+    const newCount = (count - parseFloat(productSelect?.value))
     setCount(+newCount)
   }
 
   const addProduct = (productSelect: any) => {
     const updatedCart = postCart(productSelect)
     setBuys(updatedCart.product)
-    const newCount = (count + parseFloat(productSelect?.value)).toFixed(2)
+    const newCount = (count + parseFloat(productSelect?.value))
     setCount(+newCount)
   }
 
 
-  // const handleCheck = (productId: any) => {
-  //   const newProducts = buys?.map((product) => {
-  //     if (product.id === productId) {
-  //       return {
-  //         ...product,
-  //         buy: !product.buy
-  //       }
-  //     }
-  //     return product
-  //   })
-  //   // setProducts(newProducts)
-  //   setMessage(null)
-  // }
+  const handleCheck = (product: any, event) => {
+
+    const newProducts = buys?.map((prod) => {
+      if (product.id === prod.id) {
+        return {
+          ...prod,
+          buy: !prod.buy
+        }
+      }
+      return prod
+    })
+    setBuys(newProducts)
+    setMessage(null)
+  }
 
   const redirect = () => {
     router.push('/login')
   }
 
-  // const checkout = () => {
-  //   const bdBuys = localStorage.getItem('bdBuys')
-  //   const buysSalve = bdBuys && JSON.parse(bdBuys)
-  //   if (isClient) {
-  //     const buys = buys?.filter((product) => product.buy && product)
-  //     const notBuys = buys?.filter((product) => !product.buy && product)
-  //     if (buys.length !== 0) {
-  //       if (!buysSalve || buysSalve?.length === 0) {
-  //         localStorage.setItem('bdBuys', JSON.stringify([{ client: { name: isClient.name, clientId: isClient.id }, buys: buys, value: count }]))
-  //       } else {
-  //         localStorage.setItem('bdBuys', JSON.stringify([...JSON.parse(bdBuys), { client: { name: isClient.name, clientId: isClient.id }, buys: buys, valueBuys: count }]))
-  //       }
-  //       setProducts(notBuys)
-  //       localStorage.setItem('bdCart', JSON.stringify(notBuys))
-  //       localStorage.setItem('clientLogged', JSON.stringify({ ...isClient, productsCart: notBuys }))
-  //       setMessage({
-  //         status: 200,
-  //         message: 'Compra finalizada com sucesso!'
-  //       })
-  //       setOpenModal(true)
-  //       const timer = setTimeout(() => {
-  //         onClose();
-  //         setOpenModal(false)
-  //         setMessage(null)
-  //       }, 2000);
+  const checkout = () => {
 
-  //       return () => clearTimeout(timer);
-  //     } else {
-  //       setMessage({
-  //         status: 400,
-  //         message: 'Não há produtos selecionado!'
-  //       })
-  //       setOpenModal(true)
-  //     }
+    const buysCompleted = localStorage.getItem('buysCompleted')
+    const bdBuys = buysCompleted && JSON.parse(buysCompleted)
+    const prodcutsSelected = buys.filter((product) => product.buy)
+    const prodcutsNotSelected = buys?.filter((product) => !product.buy && product)
 
-  //   } else {
-  //     setMessage({
-  //       status: 400,
-  //       message: 'Para prosseguir é necessário efetuar o Login!'
-  //     })
-  //     setOpenModal(true)
-  //   }
-  // }
+    if (isClient) {
+      if (prodcutsSelected.length) {
+        if (bdBuys) {
+          localStorage.setItem('buysCompleted', JSON.stringify([...bdBuys, { client: { ...isClient }, buys: { ...prodcutsNotSelected } }]))
+        } else {
+          localStorage.setItem('buysCompleted', JSON.stringify([{ client: { ...isClient }, buys: { ...prodcutsNotSelected } }]))
+        }
+        setBuys(prodcutsNotSelected)
+        localStorage.setItem('bdCart', JSON.stringify([...prodcutsNotSelected]))
+        localStorage.setItem('clientLogged', JSON.stringify({ ...isClient, productsCart: prodcutsNotSelected }))
+
+        setMessage({
+          status: 200,
+          message: 'Compra finalizada com sucesso!'
+        })
+        setOpenModal(true)
+        const timer = setTimeout(() => {
+          setOpenModal(false)
+          setMessage(null)
+          onClose();
+        }, 2000);
+
+        return () => clearTimeout(timer);
+
+      } else {
+        setMessage({
+          status: 400,
+          message: 'Não há produtos selecionado!'
+        })
+      }
+
+    } else {
+      setMessage({
+        status: 400,
+        message: 'Para prosseguir é necessário efetuar o Login!'
+      })
+    }
+    setOpenModal(true)
+
+  }
 
   return (
     <div
@@ -166,7 +172,7 @@ const Cart = ({
                   (
                     buys?.map((product) =>
                       <div key={product.id}>
-                        <ItemCart product={product} removeProduct={removeProduct} handleCheck={() => console.log('handleCheck')} addProduct={addProduct} />
+                        <ItemCart product={product} removeProduct={removeProduct} handleCheck={handleCheck} addProduct={addProduct} />
                       </div>
                     )
                   )
@@ -175,11 +181,11 @@ const Cart = ({
               {buys && buys.length !== 0 && count ? (
                 <p className="text-end font-bold text-green">
                   Total:
-                  <span className="ml-2">R${count}</span>
+                  <span className="ml-2">R${count.toFixed(2)}</span>
                 </p>
               ) : ''}
               <footer className="flex justify-around mt-5">
-                <Button disabled={!buys || buys?.length === 0} text="Finalizar" type="button" className="text-xs m-0 p-0" onClick={() => ('checkout')} />
+                <Button disabled={!buys || buys?.length === 0} text="Finalizar" type="button" className="text-xs m-0 p-0" onClick={checkout} />
                 <Button disabled={!buys || buys?.length === 0} text="Limpar" type="button" className="text-xs m-0 p-0" onClick={() => {
                   clearCart(),
                     onClose()

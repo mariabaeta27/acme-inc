@@ -6,11 +6,12 @@ import Input from "../Input";
 import { useEffect, useState } from "react";
 
 const ItemCart = ({ product, removeProduct, handleCheck, addProduct }: { product: any, removeProduct: any, handleCheck: any, addProduct: any }) => {
-  const [isChecked, setIsChecked] = useState(product?.buy)
+  const [isChecked, setIsChecked] = useState(false)
   const [amount, setAmount] = useState(0)
 
   useEffect(() => {
     setAmount(product.amount)
+    setIsChecked(product?.buy)
   }, [product])
 
 
@@ -25,7 +26,7 @@ const ItemCart = ({ product, removeProduct, handleCheck, addProduct }: { product
           type="checkbox"
           checked={isChecked}
           className={`w-3 h-3 rounded m-0 p-0 form-checkbox sm:w-full`}
-          onChange={() => { setIsChecked(!isChecked), handleCheck(product.id) }}
+          onChange={(e) => { setIsChecked(!isChecked), handleCheck(product, e) }}
         />
       </div>
 
@@ -61,7 +62,7 @@ const ItemCart = ({ product, removeProduct, handleCheck, addProduct }: { product
                 -
               </p>
             </div>
-            <p className="font-semibold text-green w-18 mt-1 mr-1">R${(product?.value * amount).toFixed(2)}</p>
+            <p className="font-semibold text-green w-18 mt-1 mr-1">R${(product?.value * amount)}</p>
           </div>
         </div>
       </div>

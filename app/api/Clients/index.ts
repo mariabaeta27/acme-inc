@@ -33,6 +33,7 @@ const getClient = (data: InputsLogin) => {
   const bgClients = localStorage.getItem('bdClients')
   const isClient = bgClients && JSON.parse(bgClients)?.some((client: InputsResgister) => client.email === data.email)
   const client = bgClients && JSON.parse(bgClients)?.filter((client: InputsResgister) => client.email === data.email && client.password === data.password)
+  localStorage.setItem('bdCart', JSON.stringify(client[0]?.productsCart))
 
   try {
     if (!isClient) {
@@ -56,17 +57,18 @@ const getClient = (data: InputsLogin) => {
 
 const logout = () => {
   const clientLogged = localStorage.getItem('clientLogged')
-  const client = clientLogged && JSON.parse(clientLogged)
-
+  const isClient = clientLogged && JSON.parse(clientLogged)
+  const bdCart = localStorage.getItem('bdCart')
+  const cart = bdCart && JSON.parse(bdCart)
   const bdClients = localStorage.getItem('bdClients')
   const clients = bdClients && JSON.parse(bdClients)
-
   const newClients = clients.map((clientArr: ClientComplet) => {
-    if (client?.id === clientArr?.id) {
+    if (isClient?.id === clientArr?.id) {
+      const productInCart = [...cart]
       return {
         ...clientArr,
-        favorites: [...clientArr.favorites, ...client.favorites],
-        productsCart: [...clientArr.productsCart, ...client.productsCart]
+        favorites: [...isClient.favorites],
+        productsCart: [...productInCart]
       }
     } else {
       return clientArr
@@ -77,6 +79,5 @@ const logout = () => {
   localStorage.removeItem('clientLogged')
   localStorage.removeItem('bdCart')
 }
-
 
 export { postClient, getClient, logout }
