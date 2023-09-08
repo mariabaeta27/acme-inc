@@ -71,9 +71,7 @@ const Cart = ({ isOpen, onClose }) => {
     if (isClient) {
       const buys = products?.filter((product) => product.buy && product)
       const notBuys = products?.filter((product) => !product.buy && product)
-      console.log(buys)
       if (buys.length !== 0) {
-        console.log(buysSalve)
         if (!buysSalve || buysSalve?.length === 0) {
           localStorage.setItem('bdBuys', JSON.stringify([{ client: { name: isClient.name, clientId: isClient.id }, buys: buys, value: count }]))
         } else {

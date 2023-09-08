@@ -11,7 +11,7 @@ const ItemCart = ({ product, removeProduct, handleCheck }: { product: any, remov
 
   return (
     <div
-      className="m-3 flex gap-10px rounded-md shadow-sm w-full h-34  bg-bege/35 hover:shadow-md bg-green-ligth/30 "
+      className="m-3 flex w-auto rounded-md shadow-sm h-34  bg-bege/35 hover:shadow-md bg-green/10 "
       key={product?.id}
     >
       <div className="pt-4 mx-1">
@@ -23,20 +23,27 @@ const ItemCart = ({ product, removeProduct, handleCheck }: { product: any, remov
           onChange={() => { setIsChecked(!isChecked), handleCheck(product.id) }}
         />
       </div>
-      <div className="mr-2">
-        <img
-          src={product?.image}
-          alt={product?.name}
-          className="h-10 w-10 rounded-md ml-0.5 mt-0.5"
-          width='auto'
-          height='auto'
-        />
+
+      <div className="flex w-full py-1">
+        <div className="m-1">
+          <img
+            src={product?.image}
+            alt={product?.name}
+            className="h-full w-8 p-0"
+            width='auto'
+            height='auto'
+          />
+        </div>
+        <div className="w-full grid grid-flow-col-2 mx-0.5">
+          <p className="text-green  mr-2 w-40  col-span-1">{product?.name}</p>
+          <XMarkIcon className="h-5 w-5 text-green ml-5 mt-1" onClick={() => removeProduct(product)} />
+          <div className="col-span-2 flex justify-end w-full">
+            <p className="font-semibold text-green w-18 mt-1 mr-1">R${product?.value}</p>
+          </div>
+        </div>
       </div>
-      <div className="w-auto grid gap-5 grid-cols-4 col-span-3 justify-center pt-2">
-        <p className="text-green  mr-2 w-40  col-span-2">{product?.name}</p>
-        <p className="font-semibold text-green w-18">R${product?.value}</p>
-        <XMarkIcon className="h-5 w-5 text-green ml-5 mt-1" onClick={() => removeProduct(product)} />
-      </div>
+
+
 
 
 
