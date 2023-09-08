@@ -2,110 +2,119 @@
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { Client, ClientComplet, Message, Product, ProductWithBuy } from "../../../types/types";
-import { clearCart, deleteProductCart, getProductsCart } from "../../api/Ecomerce";
+
+import { clearCart, deleteProductCart, getProductsCart, postCart } from "../../api/Ecomerce";
 import ItemCart from "../ItemCart";
 import Button from "../Button";
 
 import Modal from "../Modal";
 import { useRouter } from "next/navigation";
 
-const Cart = ({ isOpen, onClose, buys }) => {
+const Cart = ({
+  isOpen,
+  onClose,
+}) => {
 
   const router = useRouter()
-  const [products, setProducts] = useState<null | ProductWithBuy[]>()
-  const [isClient, setIsClient] = useState<null | ClientComplet>()
+  const [isClient, setIsClient] = useState<null | any>()
   const [openModal, setOpenModal] = useState(false)
-  const [message, setMessage] = useState<Message | null>()
+  const [message, setMessage] = useState<any | null>()
   const [count, setCount] = useState<number>()
+  const [buys, setBuys] = useState<any[]>()
 
   useEffect(() => {
     const client = localStorage.getItem('clientLogged')
     setIsClient(client && JSON.parse(client))
 
     const fetchProducts = async () => {
-      console.log(buys)
-
+      const result = getProductsCart()
+      const newProducts = result?.map((prod) => ({ ...prod, buy: false }))
+      setBuys(newProducts)
       let countReult = 0;
-
-      buys?.forEach(element => {
-        countReult = +(countReult + parseFloat(element.value)).toFixed(2)
+      result?.forEach((buy: any) => {
+        countReult = +(countReult + (parseFloat(buy?.value) * buy?.amount)).toFixed(2)
       });
-      setCount(countReult)
-      setProducts(buys)
+      setCount(countReult | 0)
     }
     fetchProducts()
   }, [isOpen])
 
   const removeProduct = (productSelect: any) => {
-    deleteProductCart(productSelect)
-    const newProducts = products?.filter((prod) => prod.id !== productSelect.id)
-    const newCount = (count - parseFloat(productSelect.value)).toFixed(2)
+    const updatedCart = deleteProductCart(productSelect)
+    setBuys(updatedCart)
+    const newCount = (count - parseFloat(productSelect?.value)).toFixed(2)
     setCount(+newCount)
-    setProducts(newProducts)
   }
 
-  const handleCheck = (productId: any) => {
-    const newProducts = products?.map((product) => {
-      if (product.id === productId) {
-        return {
-          ...product,
-          buy: !product.buy
-        }
-      }
-      return product
-    })
-    setProducts(newProducts)
-    setMessage(null)
+  const addProduct = (productSelect: any) => {
+    const updatedCart = postCart(productSelect)
+    setBuys(updatedCart.product)
+    const newCount = (count + parseFloat(productSelect?.value)).toFixed(2)
+    setCount(+newCount)
   }
+
+
+  // const handleCheck = (productId: any) => {
+  //   const newProducts = buys?.map((product) => {
+  //     if (product.id === productId) {
+  //       return {
+  //         ...product,
+  //         buy: !product.buy
+  //       }
+  //     }
+  //     return product
+  //   })
+  //   // setProducts(newProducts)
+  //   setMessage(null)
+  // }
 
   const redirect = () => {
     router.push('/login')
   }
 
-  const checkout = () => {
-    const bdBuys = localStorage.getItem('bdBuys')
-    const buysSalve = bdBuys && JSON.parse(bdBuys)
-    if (isClient) {
-      const buys = products?.filter((product) => product.buy && product)
-      const notBuys = products?.filter((product) => !product.buy && product)
-      if (buys.length !== 0) {
-        if (!buysSalve || buysSalve?.length === 0) {
-          localStorage.setItem('bdBuys', JSON.stringify([{ client: { name: isClient.name, clientId: isClient.id }, buys: buys, value: count }]))
-        } else {
-          localStorage.setItem('bdBuys', JSON.stringify([...JSON.parse(bdBuys), { client: { name: isClient.name, clientId: isClient.id }, buys: buys, valueBuys: count }]))
-        }
-        setProducts(notBuys)
-        localStorage.setItem('bdCart', JSON.stringify(notBuys))
-        localStorage.setItem('clientLogged', JSON.stringify({ ...isClient, productsCart: notBuys }))
-        setMessage({
-          status: 200,
-          message: 'Compra finalizada com sucesso!'
-        })
-        setOpenModal(true)
-        const timer = setTimeout(() => {
-          onClose();
-          setOpenModal(false)
-          setMessage(null)
-        }, 2000);
+  // const checkout = () => {
+  //   const bdBuys = localStorage.getItem('bdBuys')
+  //   const buysSalve = bdBuys && JSON.parse(bdBuys)
+  //   if (isClient) {
+  //     const buys = buys?.filter((product) => product.buy && product)
+  //     const notBuys = buys?.filter((product) => !product.buy && product)
+  //     if (buys.length !== 0) {
+  //       if (!buysSalve || buysSalve?.length === 0) {
+  //         localStorage.setItem('bdBuys', JSON.stringify([{ client: { name: isClient.name, clientId: isClient.id }, buys: buys, value: count }]))
+  //       } else {
+  //         localStorage.setItem('bdBuys', JSON.stringify([...JSON.parse(bdBuys), { client: { name: isClient.name, clientId: isClient.id }, buys: buys, valueBuys: count }]))
+  //       }
+  //       setProducts(notBuys)
+  //       localStorage.setItem('bdCart', JSON.stringify(notBuys))
+  //       localStorage.setItem('clientLogged', JSON.stringify({ ...isClient, productsCart: notBuys }))
+  //       setMessage({
+  //         status: 200,
+  //         message: 'Compra finalizada com sucesso!'
+  //       })
+  //       setOpenModal(true)
+  //       const timer = setTimeout(() => {
+  //         onClose();
+  //         setOpenModal(false)
+  //         setMessage(null)
+  //       }, 2000);
 
-        return () => clearTimeout(timer);
-      } else {
-        setMessage({
-          status: 400,
-          message: 'Não há produtos selecionado!'
-        })
-        setOpenModal(true)
-      }
+  //       return () => clearTimeout(timer);
+  //     } else {
+  //       setMessage({
+  //         status: 400,
+  //         message: 'Não há produtos selecionado!'
+  //       })
+  //       setOpenModal(true)
+  //     }
 
-    } else {
-      setMessage({
-        status: 400,
-        message: 'Para prosseguir é necessário efetuar o Login!'
-      })
-      setOpenModal(true)
-    }
-  }
+  //   } else {
+  //     setMessage({
+  //       status: 400,
+  //       message: 'Para prosseguir é necessário efetuar o Login!'
+  //     })
+  //     setOpenModal(true)
+  //   }
+  // }
 
   return (
     <div
@@ -155,21 +164,23 @@ const Cart = ({ isOpen, onClose, buys }) => {
                       <p className="text-center text-green text-lg font-bold">Não há produtos para serem exebidos</p>
                     </div>) :
                   (
-                    products?.map((product) =>
-                      <ItemCart product={product} removeProduct={removeProduct} handleCheck={handleCheck} />
+                    buys?.map((product) =>
+                      <div key={product.id}>
+                        <ItemCart product={product} removeProduct={removeProduct} handleCheck={() => console.log('handleCheck')} addProduct={addProduct} />
+                      </div>
                     )
                   )
                 }
               </div>
-              {products && products.length !== 0 && count ? (
+              {buys && buys.length !== 0 && count ? (
                 <p className="text-end font-bold text-green">
                   Total:
                   <span className="ml-2">R${count}</span>
                 </p>
               ) : ''}
               <footer className="flex justify-around mt-5">
-                <Button disabled={!products || products?.length === 0} text="Finalizar" type="button" className="text-xs m-0 p-0" onClick={checkout} />
-                <Button disabled={!products || products?.length === 0} text="Limpar" type="button" className="text-xs m-0 p-0" onClick={() => {
+                <Button disabled={!buys || buys?.length === 0} text="Finalizar" type="button" className="text-xs m-0 p-0" onClick={() => ('checkout')} />
+                <Button disabled={!buys || buys?.length === 0} text="Limpar" type="button" className="text-xs m-0 p-0" onClick={() => {
                   clearCart(),
                     onClose()
                 }} />

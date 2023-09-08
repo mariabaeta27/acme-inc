@@ -27,9 +27,6 @@ const Home = () => {
     setIsClient(client && client)
     const favorites = clientLogged && client.favorites
     const buys = clientLogged && client.productsCart
-
-
-
     const fetchProducts = async () => {
       const bdProducts = await getProducts();
       const newProducts = bdProducts?.map((product: Product) => {
@@ -41,12 +38,13 @@ const Home = () => {
           buy: isBusy || false
         }
       })
-      const newFavorites = newProducts?.filter((product: ProductWithFavorites) => product.isFavorite)
+
       const newBuys = newProducts?.filter((product: ProductWithBuy) => product.buy)
+      setBuys(newBuys)
+      const newFavorites = newProducts?.filter((product: ProductWithFavorites) => product.isFavorite)
       setProducts(newProducts)
       setProductsFilters(newProducts)
       setProductFavorites(newFavorites)
-      setBuys(newBuys)
     };
     fetchProducts()
     setLoading(false)
@@ -109,7 +107,10 @@ const Home = () => {
               />)}
 
             <div>
-              <Cart isOpen={isDrawerOpen} onClose={closeDrawer} buys={buys} />
+              <Cart
+                isOpen={isDrawerOpen}
+                onClose={closeDrawer}
+              />
             </div>
 
           </div>
