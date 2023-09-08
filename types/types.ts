@@ -44,3 +44,14 @@ export type ClientComplet = {
   favorites: [],
   productsCart: []
 }
+
+
+
+export type ProductWithBuy = {
+  id: any;
+  name: string;
+  description: string;
+  value: string;
+  image: string;
+  buy: boolean;
+}

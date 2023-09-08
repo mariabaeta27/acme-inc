@@ -10,12 +10,13 @@ export const content = [
 export const theme = {
   extend: {
     spacing: {
-      'width-100vw': '100vw',
       '128': '32rem',
       '144': '36rem',
+      '68': '17rem'
     },
   },
   screens: {
+    'smallsm': '375',
     'sm': '640px',
     'md': '768px',
     'lg': '1024px',

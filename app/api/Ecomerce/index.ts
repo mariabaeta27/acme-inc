@@ -45,27 +45,16 @@ const deleteProductCart = (product: Product) => {
   const client = clientLogged && JSON.parse(clientLogged)
   const bdCart = localStorage.getItem('bdCart')
   const cart = bdCart && JSON.parse(bdCart)
-  try {
-    const newCart = cart.filter((prod: Product) => prod?.id !== product.id)
-    if (client) {
-      const newClient = {
-        ...client,
-        productsCart: newCart
+  const newCart = cart.filter((prod: Product) => prod?.id !== product.id)
+  if (client) {
+    const newClient = {
+      ...client,
+      productsCart: newCart
 
-      }
-      localStorage.setItem('clientLogged', JSON.stringify(newClient))
     }
-    localStorage.setItem('bdCart', JSON.stringify(newCart))
-    return {
-      status: 200,
-      message: `Produto ${product?.name} removido do carrinho com sucesso`
-    }
-  } catch (erro) {
-    return {
-      status: 400,
-      message: `Falha ao remover produto ${product?.name} do carrinho`
-    }
+    localStorage.setItem('clientLogged', JSON.stringify(newClient))
   }
+  localStorage.setItem('bdCart', JSON.stringify(newCart))
 }
 
 

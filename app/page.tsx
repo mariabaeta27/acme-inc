@@ -70,7 +70,6 @@ const Home = () => {
             isClient={isClient}
             isChecked={isChecked}
             setIsChecked={setIsChecked}
-
           />
           <div>
           </div>

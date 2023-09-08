@@ -13,7 +13,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="bg-white">
-        <div className="h-auto w-width-100vw p-4">
+        <div className="h-auto w-width-screen p-4">
           {children}
         </div>
       </body>

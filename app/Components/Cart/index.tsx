@@ -2,7 +2,7 @@
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { Client, Message, Product } from "../../../types/types";
+import { Client, ClientComplet, Message, Product, ProductWithBuy } from "../../../types/types";
 import { clearCart, deleteProductCart, getProductsCart } from "../../api/Ecomerce";
 import ItemCart from "../ItemCart";
 import Button from "../Button";
@@ -10,10 +10,9 @@ import Alert from "../Alert";
 
 const Cart = ({ isOpen, onClose }) => {
 
-  const [products, setProducts] = useState<Product[] | null>()
-  const [isClient, setIsClient] = useState<null | Client>()
-  const [alertMessage, setAlertMessage] = useState<Message | null>()
-  const [showAlert, setShowAlert] = useState(false);
+  const [products, setProducts] = useState<null | ProductWithBuy[]>()
+  const [isClient, setIsClient] = useState<null | ClientComplet>()
+  // const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     const client = localStorage.getItem('clientLogged')
@@ -21,22 +20,61 @@ const Cart = ({ isOpen, onClose }) => {
 
     const fetchProducts = async () => {
       const products = await getProductsCart();
-      setProducts(products)
+      const productEdit = products?.map((product) => ({ ...product, buy: false }))
+      setProducts(productEdit)
     }
     fetchProducts()
   }, [isOpen])
 
-
-  const handleAlertClose = () => {
-    setShowAlert(true);
-    setAlertMessage(null)
-  };
-
-  const removeProduct = (productSelect: Product) => {
+  const removeProduct = (productSelect: any) => {
     const result = deleteProductCart(productSelect)
     const newProducts = products?.filter((prod) => prod.id !== productSelect.id)
     setProducts(newProducts)
-    setAlertMessage(result)
+  }
+
+  const handleCheck = (productId: any) => {
+    const newProducts = products?.map((product) => {
+      if (product.id === productId) {
+        return {
+          ...product,
+          buy: !product.buy
+        }
+      }
+      return product
+    })
+    setProducts(newProducts)
+  }
+
+
+  const checkout = () => {
+    const bdBuys = localStorage.getItem('bdBuys')
+    const buysSalve = bdBuys && JSON.parse(bdBuys)
+    if (isClient) {
+      console.log('Finilizar')
+      const buys = products?.filter((product) => product.buy && product)
+      const notBuys = products?.filter((product) => !product.buy && product)
+      console.log(buys)
+      if (buys.length !== 0) {
+        console.log(buysSalve)
+
+        debugger
+
+        buysSalve.length === 0 ?
+          localStorage.setItem('bdBuys', JSON.stringify([{ client: { name: isClient.name, clientId: isClient.id }, buys: buys }])) :
+          localStorage.setItem('bdBuys', JSON.stringify([...JSON.parse(bdBuys), { client: { name: isClient.name, clientId: isClient.id }, buys: buys }]))
+
+        setProducts(notBuys)
+        localStorage.setItem('bdCart', JSON.stringify(notBuys))
+        localStorage.setItem('clientLogged', JSON.stringify({ ...isClient, productsCart: notBuys }))
+      } else {
+        console.log('Não tem produtos selecionado')
+      }
+
+    } else {
+      console.log('Logar')
+    }
+
+
   }
 
   return (
@@ -74,27 +112,18 @@ const Cart = ({ isOpen, onClose }) => {
                     </div>) :
                   (
                     products?.map((product) =>
-                      <ItemCart product={product} removeProduct={removeProduct} />
+                      <ItemCart product={product} removeProduct={removeProduct} handleCheck={handleCheck} />
                     )
                   )
                 }
               </div>
               <footer className="flex justify-around mt-5">
-                <Button disabled={!products} text="Finalizar" type="button" className="text-xs m-0 p-0" onClick={() => console.log('Finalizar')} />
-                <Button disabled={!products} text="Limpar" type="button" className="text-xs m-0 p-0" onClick={() => {
+                <Button disabled={!products || products?.length === 0} text="Finalizar" type="button" className="text-xs m-0 p-0" onClick={checkout} />
+                <Button disabled={!products || products?.length === 0} text="Limpar" type="button" className="text-xs m-0 p-0" onClick={() => {
                   clearCart(),
                     onClose()
                 }} />
               </footer>
-              {
-                alertMessage && (
-                  <Alert
-                    message={alertMessage}
-                    onClose={handleAlertClose}
-                    showAlert={showAlert}
-                    setShowAlert={setShowAlert}
-                  />)
-              }
             </div>
           </div>
         </div>
