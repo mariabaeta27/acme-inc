@@ -38,7 +38,6 @@ const Home = () => {
         }
       })
       const newFavorites = newProducts?.filter((product: ProductWithFavorites) => product.isFavorite)
-      console.log(newProducts)
       setProducts(newProducts)
       setProductsFilters(newProducts)
       setProductFavorites(newFavorites)

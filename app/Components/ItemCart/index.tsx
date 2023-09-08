@@ -9,7 +9,6 @@ const ItemCart = ({ product, removeProduct, handleCheck }: { product: any, remov
 
   const [isChecked, setIsChecked] = useState(product?.buy)
 
-
   return (
     <div
       className="m-3 flex gap-10px rounded-md shadow-sm w-full h-34  bg-bege/35 hover:shadow-md bg-green-ligth/30 "

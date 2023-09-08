@@ -17,7 +17,7 @@ const Product = () => {
   const [isClient, setIsClient] = useState()
   const [alertMessage, setAlertMessage] = useState<Message | null>()
   const [showAlert, setShowAlert] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(product?.isFavorite);
+  const [isFavorite, setIsFavorite] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const router = useRouter()
 
@@ -26,11 +26,14 @@ const Product = () => {
     const client = localStorage.getItem('clientLogged')
     setIsClient(client && JSON.parse(client))
     const favorites = client && JSON.parse(client).favorites
+
     const fetchProduct = async () => {
       const productSelect = await getProduct(params?.id)
-      const isFavorite = favorites?.some((fav: Product) => fav.id === productSelect.id)
-      setProuct({ ...productSelect, isFavorite: isFavorite })
+      const favorite = favorites?.some((fav: Product) => fav.id === productSelect.id)
+      setIsFavorite(favorite)
+      setProuct(productSelect)
     }
+
     fetchProduct()
     setLoading(false)
   }, [])
@@ -54,9 +57,7 @@ const Product = () => {
   };
 
   const handleFavorite = (productSelect: ProductWithFavorites) => {
-
     if (isFavorite) {
-
       delete product.isFavorite
       const result = removeProductFavotrites(productSelect)
       setAlertMessage(result)
