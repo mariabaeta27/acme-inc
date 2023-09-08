@@ -11,7 +11,7 @@ const ItemCart = ({ product, removeProduct, handleCheck }: { product: any, remov
 
   return (
     <div
-      className="m-3 flex w-auto rounded-md shadow-sm h-34  bg-bege/35 hover:shadow-md bg-green/10 "
+      className="m-3 flex w-auto rounded-md shadow-sm h-34  bg-bege/35 hover:shadow-md bg-green/10"
       key={product?.id}
     >
       <div className="pt-4 mx-1">
@@ -19,7 +19,7 @@ const ItemCart = ({ product, removeProduct, handleCheck }: { product: any, remov
           name="checkbox"
           type="checkbox"
           checked={isChecked}
-          className={`w-3 h-3 rounded m-0 p-0 form-checkbox checked:bg-green`}
+          className={`w-3 h-3 rounded m-0 p-0 form-checkbox sm:w-full`}
           onChange={() => { setIsChecked(!isChecked), handleCheck(product.id) }}
         />
       </div>
