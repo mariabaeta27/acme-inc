@@ -10,7 +10,7 @@ import Button from "../Button";
 import Modal from "../Modal";
 import { useRouter } from "next/navigation";
 
-const Cart = ({ isOpen, onClose }) => {
+const Cart = ({ isOpen, onClose, buys }) => {
 
   const router = useRouter()
   const [products, setProducts] = useState<null | ProductWithBuy[]>()
@@ -24,17 +24,15 @@ const Cart = ({ isOpen, onClose }) => {
     setIsClient(client && JSON.parse(client))
 
     const fetchProducts = async () => {
-      const products = await getProductsCart();
+      console.log(buys)
 
       let countReult = 0;
 
-      products?.forEach(element => {
+      buys?.forEach(element => {
         countReult = +(countReult + parseFloat(element.value)).toFixed(2)
       });
       setCount(countReult)
-
-      const productEdit = products?.map((product: Product) => ({ ...product, buy: false }))
-      setProducts(productEdit)
+      setProducts(buys)
     }
     fetchProducts()
   }, [isOpen])
@@ -151,7 +149,7 @@ const Cart = ({ isOpen, onClose }) => {
               </button>
               <h1 className="font-bold text-xl text-green">Carrinho</h1>
               <div className=" mt-10">
-                {!products || products?.length === 0 ?
+                {!buys || buys?.length === 0 ?
                   (
                     <div className="flex justify-center items-center w-full">
                       <p className="text-center text-green text-lg font-bold">Não há produtos para serem exebidos</p>

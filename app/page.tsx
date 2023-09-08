@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { getProducts } from "./api/Produts"
-import { Client, Message, Product, ProductWithFavorites } from "../types/types"
+import { Client, Message, Product, ProductComplet, ProductWithBuy, ProductWithFavorites } from "../types/types"
 import { Alert, CardProduct, Cart, Filters, Header, Loading } from "./Components"
 
 
@@ -17,6 +17,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   const [isChecked, setIsChecked] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [buys, setBuys] = useState()
 
 
   useEffect(() => {
@@ -25,6 +26,7 @@ const Home = () => {
     const client = JSON.parse(clientLogged)
     setIsClient(client && client)
     const favorites = clientLogged && client.favorites
+    const buys = clientLogged && client.productsCart
 
 
 
@@ -32,19 +34,24 @@ const Home = () => {
       const bdProducts = await getProducts();
       const newProducts = bdProducts?.map((product: Product) => {
         const isFavorite = favorites?.some((fav: Product) => fav.id === product.id)
+        const isBusy = buys?.some((buy: Product) => buy.id === product.id)
         return {
           ...product,
-          isFavorite: isFavorite || false
+          isFavorite: isFavorite || false,
+          buy: isBusy || false
         }
       })
       const newFavorites = newProducts?.filter((product: ProductWithFavorites) => product.isFavorite)
+      const newBuys = newProducts?.filter((product: ProductWithBuy) => product.buy)
       setProducts(newProducts)
       setProductsFilters(newProducts)
       setProductFavorites(newFavorites)
+      setBuys(newBuys)
     };
     fetchProducts()
     setLoading(false)
   }, [])
+
 
   const handleAlertClose = () => {
     setShowAlert(true);
@@ -76,7 +83,7 @@ const Home = () => {
                 <p className="text-center text-green text-lg font-bold">Não há produtos para serem exebidos</p>
               </div>
             ) :
-              productsFilters?.map((product: ProductWithFavorites) => (
+              productsFilters?.map((product: ProductComplet) => (
                 <div key={product?.id}>
                   <CardProduct
                     product={product}
@@ -88,6 +95,7 @@ const Home = () => {
                     favorites={productFavorites}
                     setProductFavorites={setProductFavorites}
                     isChecked={isChecked}
+                    setBuys={setBuys}
                   />
                 </div>
               ))}
@@ -101,7 +109,7 @@ const Home = () => {
               />)}
 
             <div>
-              <Cart isOpen={isDrawerOpen} onClose={closeDrawer} />
+              <Cart isOpen={isDrawerOpen} onClose={closeDrawer} buys={buys} />
             </div>
 
           </div>

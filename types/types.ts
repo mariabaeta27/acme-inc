@@ -55,3 +55,14 @@ export type ProductWithBuy = {
   image: string;
   buy: boolean;
 }
+
+
+export type ProductComplet = {
+  id: any;
+  name: string;
+  description: string;
+  value: string;
+  image: string;
+  buy: boolean;
+  isFavorite: boolean;
+}
